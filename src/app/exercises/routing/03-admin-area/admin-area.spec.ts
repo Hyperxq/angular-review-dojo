@@ -1,6 +1,12 @@
-import { Location } from '@angular/common';
 import { TestBed } from '@angular/core/testing';
-import { Route, Router, provideRouter, withComponentInputBinding } from '@angular/router';
+import {
+  NavigationCancel,
+  NavigationCancellationCode,
+  Route,
+  Router,
+  provideRouter,
+  withComponentInputBinding,
+} from '@angular/router';
 import { RouterTestingHarness } from '@angular/router/testing';
 import { AREA_ROUTES } from './area.routes';
 import { ADMIN_ROUTES } from './admin/admin.routes';
@@ -81,16 +87,17 @@ describe('L3 - admin area', () => {
     expect(loadAdmin).toHaveBeenCalledTimes(1);
   });
 
-  it('keeps the browser history clean when it redirects', async () => {
-    await harness.navigateByUrl('/home');
+  it('redirects the navigation instead of rejecting it', async () => {
+    const cancellations: (NavigationCancellationCode | undefined)[] = [];
+    TestBed.inject(Router).events.subscribe((e) => {
+      if (e instanceof NavigationCancel) {
+        cancellations.push(e.code);
+      }
+    });
+
     await harness.navigateByUrl('/admin');
 
-    const location = TestBed.inject(Location);
-    expect(location.path()).toBe('/login?returnUrl=%2Fadmin');
-    location.back();
-    await harness.fixture.whenStable();
-
-    expect(url()).toBe('/home');
+    expect(cancellations).toEqual([NavigationCancellationCode.Redirect]);
   });
 
   it('loads the reports page lazily', () => {
