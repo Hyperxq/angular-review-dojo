@@ -7,14 +7,16 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
     { provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => QuantityStepper), multi: true },
   ],
   template: `
-    <button type="button" aria-label="Decrease quantity" (click)="step(-1)">-</button>
+    <button type="button" aria-label="Decrease quantity" (click)="step(-1)" (blur)="onTouched()" [disabled]="disabled()">-</button>
     <output>{{ value() }}</output>
-    <button type="button" aria-label="Increase quantity" (click)="step(1)">+</button>
+    <button type="button" aria-label="Increase quantity" (click)="step(1)" (blur)="onTouched()" [disabled]="disabled()">+</button>
   `,
 })
 export class QuantityStepper implements ControlValueAccessor {
   protected readonly value = signal(1);
+  protected readonly disabled = signal(false);
   private onChange: (value: number) => void = () => {};
+  protected onTouched: () => void = () => {};
 
   writeValue(value: number) {
     this.value.set(value);
@@ -24,9 +26,16 @@ export class QuantityStepper implements ControlValueAccessor {
     this.onChange = fn;
   }
 
-  registerOnTouched(_fn: () => void) {}
+  registerOnTouched(fn: () => void) {
+    this.onTouched = fn;
+  }
+
+  setDisabledState(isDisabled: boolean) {
+    this.disabled.set(isDisabled);
+  }
 
   protected step(delta: number) {
     this.value.update((value) => Math.max(1, value + delta));
+    this.onChange(this.value());
   }
 }

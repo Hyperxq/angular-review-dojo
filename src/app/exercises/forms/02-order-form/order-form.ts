@@ -1,6 +1,6 @@
 import { Component, inject, output } from '@angular/core';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { skuAvailable } from './order-validators';
+import { skuAvailable, totalQuantityWithin } from './order-validators';
 import { QuantityStepper } from './quantity-stepper';
 import { SkuApi } from './sku-api';
 
@@ -26,6 +26,9 @@ export interface OrderPayload {
           </div>
         }
       </div>
+      @if (form.controls.lines.hasError('tooMany')) {
+        <p role="alert">An order can have at most 10 units.</p>
+      }
       <button type="button" (click)="addLine()">Add line</button>
       <button type="submit">Place order</button>
     </form>
@@ -37,7 +40,9 @@ export class OrderForm {
 
   readonly submitted = output<OrderPayload>();
 
-  readonly form = this.fb.group({ lines: this.fb.array([this.newLine()]) });
+  readonly form = this.fb.group({
+    lines: this.fb.array([this.newLine()], totalQuantityWithin(10)),
+  });
 
   protected addLine() {
     this.form.controls.lines.push(this.newLine());
@@ -48,7 +53,7 @@ export class OrderForm {
   }
 
   protected submit() {
-    if (this.form.invalid) {
+    if (!this.form.valid) {
       return;
     }
     this.submitted.emit(this.form.getRawValue());
@@ -60,7 +65,7 @@ export class OrderForm {
         validators: [Validators.required],
         asyncValidators: [skuAvailable(this.skuApi)],
       }),
-      quantity: this.fb.control(1, [Validators.min(1), Validators.max(10)]),
+      quantity: this.fb.control(1, [Validators.min(1)]),
     });
   }
 }
