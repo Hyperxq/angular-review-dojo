@@ -321,6 +321,13 @@ export const EXERCISES: readonly Exercise[] = [
     loadComponent: () =>
       import('./memory/03-sales-dashboard/dashboard-demo').then((m) => m.DashboardDemo),
   },
+  {
+    topic: 'lifecycle',
+    level: 1,
+    slug: '01-product-badge',
+    title: 'Product badge (inputs and hooks)',
+    loadComponent: () => import('./lifecycle/01-product-badge/badge-demo').then((m) => m.BadgeDemo),
+  },
 ];
 
 export function routesFor(topic: Topic): Routes {

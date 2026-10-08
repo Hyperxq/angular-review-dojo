@@ -45,5 +45,10 @@ export const routes: Routes = [
     path: 'memory',
     loadChildren: () => import('./exercises/memory/memory.routes').then((m) => m.MEMORY_ROUTES),
   },
+  {
+    path: 'lifecycle',
+    loadChildren: () =>
+      import('./exercises/lifecycle/lifecycle.routes').then((m) => m.LIFECYCLE_ROUTES),
+  },
   { path: '**', redirectTo: '' },
 ];
