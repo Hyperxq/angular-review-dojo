@@ -21,8 +21,10 @@ export class OrderPage {
   protected readonly order = signal<DraftOrder>({ lines: [] });
 
   protected addNext() {
-    const lines = this.order().lines;
-    const product = SEED_PRODUCTS[lines.length % SEED_PRODUCTS.length];
-    lines.push({ productId: product.id, name: product.name, price: product.price, quantity: 1 });
+    this.order.update(({ lines }) => {
+      const product = SEED_PRODUCTS[lines.length % SEED_PRODUCTS.length];
+      const line = { productId: product.id, name: product.name, price: product.price, quantity: 1 };
+      return { lines: [...lines, line] };
+    });
   }
 }
