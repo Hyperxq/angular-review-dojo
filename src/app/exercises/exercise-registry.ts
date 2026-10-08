@@ -3,6 +3,7 @@ import { Type } from '@angular/core';
 
 export const TOPICS = {
   rxjs: 'RxJS',
+  'rxjs-to-signals': 'RxJS to Signals',
   routing: 'Routing',
   performance: 'Performance',
   forms: 'Forms',
