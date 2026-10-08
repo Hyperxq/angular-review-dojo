@@ -288,6 +288,14 @@ export const EXERCISES: readonly Exercise[] = [
     loadComponent: () =>
       import('./change-detection/02-page-header/pages-demo').then((m) => m.PagesDemo),
   },
+  {
+    topic: 'change-detection',
+    level: 3,
+    slug: '03-live-quote',
+    title: 'Live quote (zoneless migration)',
+    loadComponent: () =>
+      import('./change-detection/03-live-quote/live-quote').then((m) => m.LiveQuote),
+  },
 ];
 
 export function routesFor(topic: Topic): Routes {
