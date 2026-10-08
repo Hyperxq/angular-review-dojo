@@ -1,52 +1,34 @@
-import {
-  AfterViewChecked,
-  AfterViewInit,
-  Component,
-  ElementRef,
-  Input,
-  OnInit,
-  ViewChild,
-  inject,
-} from '@angular/core';
+import { Component, ElementRef, afterNextRender, computed, inject, input, signal, viewChild } from '@angular/core';
 import { TickCalculator } from './tick-calculator';
 
 @Component({
   selector: 'app-chart-frame',
   template: `
     <div #plot class="plot"></div>
-    @if (showLegend) {
-      <ul #legend class="legend">
+    @if (showLegend()) {
+      <ul class="legend" aria-live="polite">
         <li>Sales</li>
         <li>Returns</li>
       </ul>
     }
-    <p data-testid="width">Width: {{ width }}px</p>
+    <p data-testid="width">Width: {{ width() }}px</p>
     <ol class="ticks">
-      @for (tick of ticks; track tick) {
+      @for (tick of ticks(); track tick) {
         <li>{{ tick }}</li>
       }
     </ol>
   `,
 })
-export class ChartFrame implements OnInit, AfterViewInit, AfterViewChecked {
+export class ChartFrame {
   private readonly calculator = inject(TickCalculator);
+  private readonly plot = viewChild.required<ElementRef<HTMLElement>>('plot');
 
-  @Input() showLegend = false;
-  @ViewChild('plot') plot!: ElementRef<HTMLElement>;
-  @ViewChild('legend') legend?: ElementRef<HTMLElement>;
+  readonly showLegend = input(false);
 
-  protected width = 0;
-  protected ticks: number[] = [];
+  protected readonly width = signal(0);
+  protected readonly ticks = computed(() => this.calculator.ticks(this.width()));
 
-  ngOnInit() {
-    this.legend?.nativeElement.setAttribute('aria-live', 'polite');
-  }
-
-  ngAfterViewInit() {
-    this.width = this.plot.nativeElement.offsetWidth;
-  }
-
-  ngAfterViewChecked() {
-    this.ticks = this.calculator.ticks(this.width);
+  constructor() {
+    afterNextRender({ read: () => this.width.set(this.plot().nativeElement.offsetWidth) });
   }
 }
