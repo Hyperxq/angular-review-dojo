@@ -9,8 +9,15 @@ export class TileRegistry {
     return this.tiles.size;
   }
 
+  /** Returns the function that removes the tile again. */
   register(tile: ProductTile) {
-    this.tiles.set(tile.product().id, tile);
+    const id = tile.product().id;
+    this.tiles.set(id, tile);
+    return () => {
+      if (this.tiles.get(id) === tile) {
+        this.tiles.delete(id);
+      }
+    };
   }
 
   highlightCategory(category: string) {

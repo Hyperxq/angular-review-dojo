@@ -1,4 +1,4 @@
-import { Component, ElementRef, computed, inject, input } from '@angular/core';
+import { Component, computed, inject, input } from '@angular/core';
 import { PreviewCache } from './preview-cache';
 
 @Component({
@@ -7,8 +7,7 @@ import { PreviewCache } from './preview-cache';
 })
 export class SearchPreview {
   private readonly cache = inject(PreviewCache);
-  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
 
   readonly query = input.required<string>();
-  protected readonly preview = computed(() => this.cache.render(this.query(), this.host.nativeElement));
+  protected readonly preview = computed(() => this.cache.render(this.query()));
 }
