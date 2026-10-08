@@ -163,6 +163,14 @@ export const EXERCISES: readonly Exercise[] = [
     loadChildren: () =>
       import('./routing/05-catalog-admin/admin.routes').then((m) => m.ADMIN_ROUTES),
   },
+  {
+    topic: 'performance',
+    level: 1,
+    slug: '01-product-grid',
+    title: 'Product grid',
+    loadComponent: () =>
+      import('./performance/01-product-grid/product-grid').then((m) => m.ProductGrid),
+  },
 ];
 
 export function routesFor(topic: Topic): Routes {
