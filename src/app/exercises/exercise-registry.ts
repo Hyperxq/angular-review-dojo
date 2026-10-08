@@ -248,6 +248,14 @@ export const EXERCISES: readonly Exercise[] = [
     title: 'Stock badge (weak assertions)',
     loadComponent: () => import('./testing/01-stock-badge/stock-overview').then((m) => m.StockOverview),
   },
+  {
+    topic: 'testing',
+    level: 2,
+    slug: '02-place-order',
+    title: 'Place order (over-mocking)',
+    loadComponent: () =>
+      import('./testing/02-place-order/place-order-demo').then((m) => m.PlaceOrderDemo),
+  },
 ];
 
 export function routesFor(topic: Topic): Routes {
