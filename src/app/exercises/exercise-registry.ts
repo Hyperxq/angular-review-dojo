@@ -211,6 +211,14 @@ export const EXERCISES: readonly Exercise[] = [
     title: 'Order form',
     loadComponent: () => import('./forms/02-order-form/order-form').then((m) => m.OrderForm),
   },
+  {
+    topic: 'forms',
+    level: 3,
+    slug: '03-checkout-form',
+    title: 'Checkout form (Signal Forms)',
+    loadComponent: () =>
+      import('./forms/03-checkout-form/checkout-form').then((m) => m.CheckoutForm),
+  },
 ];
 
 export function routesFor(topic: Topic): Routes {
