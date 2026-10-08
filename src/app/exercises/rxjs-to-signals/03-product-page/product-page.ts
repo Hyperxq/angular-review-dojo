@@ -1,56 +1,33 @@
 import { CurrencyPipe } from '@angular/common';
-import { Component, OnDestroy, OnInit, inject, signal } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { Subject, map, switchMap, takeUntil, tap } from 'rxjs';
-import { Product } from '../../../core/models';
+import { Component, inject, input, numberAttribute } from '@angular/core';
+import { rxResource } from '@angular/core/rxjs-interop';
 import { ProductApi } from '../../../core/product-api';
 
 @Component({
   selector: 'app-product-page',
   imports: [CurrencyPipe],
   template: `
-    @if (loading()) {
+    @if (product.isLoading()) {
       <p>Loading product…</p>
     }
-    @if (error(); as message) {
-      <p role="alert">{{ message }}</p>
+    @if (product.error()) {
+      <p role="alert">Could not load the product.</p>
     }
-    @if (product(); as product) {
+    @if (product.hasValue()) {
       <article>
-        <h2>{{ product.name }}</h2>
-        <p>{{ product.price | currency }}</p>
+        <h2>{{ product.value().name }}</h2>
+        <p>{{ product.value().price | currency }}</p>
       </article>
     }
   `,
 })
-export class ProductPage implements OnInit, OnDestroy {
-  private readonly route = inject(ActivatedRoute);
+export class ProductPage {
   private readonly api = inject(ProductApi);
-  private readonly destroy$ = new Subject<void>();
 
-  protected readonly product = signal<Product | null>(null);
-  protected readonly loading = signal(false);
-  protected readonly error = signal<string | null>(null);
+  readonly id = input.required({ transform: numberAttribute });
 
-  ngOnInit() {
-    this.route.paramMap
-      .pipe(
-        map((params) => Number(params.get('id'))),
-        tap(() => this.loading.set(true)),
-        switchMap((id) => this.api.get(id)),
-        takeUntil(this.destroy$),
-      )
-      .subscribe({
-        next: (product) => {
-          this.product.set(product);
-          this.loading.set(false);
-        },
-        error: () => this.error.set('Could not load the product.'),
-      });
-  }
-
-  ngOnDestroy() {
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
+  protected readonly product = rxResource({
+    params: () => this.id(),
+    stream: ({ params: id }) => this.api.get(id),
+  });
 }
