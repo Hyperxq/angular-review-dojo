@@ -126,6 +126,16 @@ export const EXERCISES: readonly Exercise[] = [
     loadComponent: () => import('./routing/01-shop-routes/shop-shell').then((m) => m.ShopShell),
     loadChildren: () => import('./routing/01-shop-routes/shop.routes').then((m) => m.SHOP_ROUTES),
   },
+  {
+    topic: 'routing',
+    level: 2,
+    slug: '02-product-pages',
+    title: 'Product pages',
+    loadComponent: () =>
+      import('./routing/02-product-pages/product-pages-shell').then((m) => m.ProductPagesShell),
+    loadChildren: () =>
+      import('./routing/02-product-pages/product-pages.routes').then((m) => m.PRODUCT_PAGES_ROUTES),
+  },
 ];
 
 export function routesFor(topic: Topic): Routes {
