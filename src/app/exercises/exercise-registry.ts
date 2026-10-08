@@ -280,6 +280,14 @@ export const EXERCISES: readonly Exercise[] = [
     loadComponent: () =>
       import('./change-detection/01-order-lines/order-editor').then((m) => m.OrderEditor),
   },
+  {
+    topic: 'change-detection',
+    level: 2,
+    slug: '02-page-header',
+    title: 'Page header (NG0100)',
+    loadComponent: () =>
+      import('./change-detection/02-page-header/pages-demo').then((m) => m.PagesDemo),
+  },
 ];
 
 export function routesFor(topic: Topic): Routes {
