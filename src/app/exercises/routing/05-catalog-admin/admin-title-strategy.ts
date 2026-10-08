@@ -1,0 +1,12 @@
+import { Injectable, inject } from '@angular/core';
+import { Title } from '@angular/platform-browser';
+import { RouterStateSnapshot, TitleStrategy } from '@angular/router';
+
+@Injectable({ providedIn: 'root' })
+export class AdminTitleStrategy extends TitleStrategy {
+  private readonly title = inject(Title);
+
+  override updateTitle(snapshot: RouterStateSnapshot) {
+    this.title.setTitle(`${this.buildTitle(snapshot)} | Admin`);
+  }
+}
