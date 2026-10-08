@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { RouterLink, RouterOutlet } from '@angular/router';
-import { SHELL_LINKS } from './index';
+import { SHELL_LINKS } from './shell-links';
 
 @Component({
   selector: 'app-product-page-shell',
