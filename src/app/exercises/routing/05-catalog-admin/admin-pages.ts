@@ -11,7 +11,7 @@ import { RouterLink, RouterOutlet } from '@angular/router';
       <a [routerLink]="[{ outlets: { aside: ['help'] } }]">Help</a>
     </nav>
     <main><router-outlet /></main>
-    <aside><router-outlet name="help" /></aside>
+    <aside><router-outlet name="aside" /></aside>
   `,
 })
 export class AdminLayout {}

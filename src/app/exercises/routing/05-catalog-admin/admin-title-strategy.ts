@@ -7,6 +7,7 @@ export class AdminTitleStrategy extends TitleStrategy {
   private readonly title = inject(Title);
 
   override updateTitle(snapshot: RouterStateSnapshot) {
-    this.title.setTitle(`${this.buildTitle(snapshot)} | Admin`);
+    const pageTitle = this.buildTitle(snapshot);
+    this.title.setTitle(pageTitle ? `${pageTitle} | Admin` : 'Admin');
   }
 }
