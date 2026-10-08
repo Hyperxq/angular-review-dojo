@@ -1,6 +1,10 @@
-import { Component, effect, inject, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
+import { toObservable, toSignal } from '@angular/core/rxjs-interop';
+import { debounceTime, distinctUntilChanged, map, of, switchMap } from 'rxjs';
 import { Product } from '../../../core/models';
 import { ProductApi } from '../../../core/product-api';
+
+const MIN_LENGTH = 2;
 
 @Component({
   selector: 'app-quick-search',
@@ -18,11 +22,14 @@ export class QuickSearch {
   private readonly api = inject(ProductApi);
 
   protected readonly term = signal('');
-  protected readonly results = signal<Product[]>([]);
 
-  constructor() {
-    effect(() => {
-      this.api.search(this.term()).subscribe((products) => this.results.set(products));
-    });
-  }
+  protected readonly results = toSignal(
+    toObservable(this.term).pipe(
+      debounceTime(300),
+      map((term) => term.trim()),
+      distinctUntilChanged(),
+      switchMap((term) => (term.length < MIN_LENGTH ? of<Product[]>([]) : this.api.search(term))),
+    ),
+    { initialValue: [] as Product[] },
+  );
 }
