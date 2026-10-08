@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { Product } from '../../../core/models';
 
 @Injectable({ providedIn: 'root' })
 export class SelectionStore {
-  private readonly selection = new Subject<Product | null>();
+  private readonly selection = new BehaviorSubject<Product | null>(null);
 
   readonly selected$ = this.selection.asObservable();
 

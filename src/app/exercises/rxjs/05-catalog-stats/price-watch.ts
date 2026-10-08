@@ -15,7 +15,7 @@ export class PriceWatch {
       price$ = timer(0, REFRESH_MS).pipe(
         switchMap(() => this.api.get(productId)),
         map((product) => product.price),
-        shareReplay(1),
+        shareReplay({ bufferSize: 1, refCount: true }),
       );
       this.prices.set(productId, price$);
     }
