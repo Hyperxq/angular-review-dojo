@@ -14,12 +14,12 @@ import { Pricing } from './pricing';
     </button>
     <table>
       <tbody>
-        @for (product of rows(); track $index) {
+        @for (row of rows(); track row.product.id) {
           <tr>
-            <td>{{ product.name }}</td>
-            <td>{{ pricing.discountedPrice(product) | currency }}</td>
+            <td>{{ row.product.name }}</td>
+            <td>{{ row.price | currency }}</td>
             <td>
-              <input type="number" min="0" [attr.aria-label]="'Quantity for ' + product.name" />
+              <input type="number" min="0" [attr.aria-label]="'Quantity for ' + row.product.name" />
             </td>
           </tr>
         }
@@ -29,7 +29,7 @@ import { Pricing } from './pricing';
     <h2>Live stock</h2>
     <button type="button" (click)="refreshStock()">Refresh stock</button>
     <ul>
-      @for (item of stock(); track item) {
+      @for (item of stock(); track item.id) {
         <li>{{ item.name }}: {{ item.stock }}</li>
       }
     </ul>
@@ -42,8 +42,12 @@ export class ProductGrid {
   protected readonly sortedByPrice = signal(false);
   protected readonly stock = signal<Product[]>(structuredClone([...SEED_PRODUCTS]));
 
+  private readonly priced = computed(() =>
+    this.products().map((product) => ({ product, price: this.pricing.discountedPrice(product) })),
+  );
+
   protected readonly rows = computed(() =>
-    this.sortedByPrice() ? [...this.products()].sort((a, b) => a.price - b.price) : this.products(),
+    this.sortedByPrice() ? [...this.priced()].sort((a, b) => a.price - b.price) : this.priced(),
   );
 
   protected toggleSort() {
