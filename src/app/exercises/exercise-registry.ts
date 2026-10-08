@@ -144,6 +144,16 @@ export const EXERCISES: readonly Exercise[] = [
     loadComponent: () => import('./routing/03-admin-area/area-shell').then((m) => m.AreaShell),
     loadChildren: () => import('./routing/03-admin-area/area.routes').then((m) => m.AREA_ROUTES),
   },
+  {
+    topic: 'routing',
+    level: 4,
+    slug: '04-account-area',
+    title: 'Account area',
+    loadComponent: () =>
+      import('./routing/04-account-area/account-shell').then((m) => m.AccountShell),
+    loadChildren: () =>
+      import('./routing/04-account-area/account.routes').then((m) => m.ACCOUNT_ROUTES),
+  },
 ];
 
 export function routesFor(topic: Topic): Routes {
