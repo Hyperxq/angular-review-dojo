@@ -108,6 +108,14 @@ export const EXERCISES: readonly Exercise[] = [
     loadComponent: () =>
       import('./rxjs-to-signals/03-product-page/product-page').then((m) => m.ProductPage),
   },
+  {
+    topic: 'rxjs-to-signals',
+    level: 4,
+    slug: '04-quick-search',
+    title: 'Quick search',
+    loadComponent: () =>
+      import('./rxjs-to-signals/04-quick-search/quick-search').then((m) => m.QuickSearch),
+  },
 ];
 
 export function routesFor(topic: Topic): Routes {
