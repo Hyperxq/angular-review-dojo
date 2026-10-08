@@ -241,6 +241,13 @@ export const EXERCISES: readonly Exercise[] = [
     title: 'Dialog kit (host directives)',
     loadComponent: () => import('./directives/03-dialog-kit/dialog-demo').then((m) => m.DialogDemo),
   },
+  {
+    topic: 'testing',
+    level: 1,
+    slug: '01-stock-badge',
+    title: 'Stock badge (weak assertions)',
+    loadComponent: () => import('./testing/01-stock-badge/stock-overview').then((m) => m.StockOverview),
+  },
 ];
 
 export function routesFor(topic: Topic): Routes {
