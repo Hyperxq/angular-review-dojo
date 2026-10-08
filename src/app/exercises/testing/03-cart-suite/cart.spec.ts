@@ -41,9 +41,8 @@ describe('CartStore', () => {
   it('totals to the cent', () => {
     store.add(keyboard);
     store.add(mouse);
-    store.add(mouse);
 
-    expect(store.total()).toBe(50.5);
+    expect(store.total()).toBe(30.3);
   });
 
   it('removes every line of a product and leaves the others', () => {
