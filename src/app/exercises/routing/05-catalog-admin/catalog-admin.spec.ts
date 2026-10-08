@@ -42,6 +42,7 @@ describe('L5 - catalog admin', () => {
   });
 
   it('keeps the draft when switching between the tabs', async () => {
+    confirmSpy.mockReturnValue(true);
     await harness.navigateByUrl('/products');
     await type('Keychron Q1');
 
@@ -50,6 +51,16 @@ describe('L5 - catalog admin', () => {
 
     await click('a', 'General');
     expect(root().querySelector('input')!.value).toBe('Keychron Q1');
+  });
+
+  it('does not ask for confirmation when only switching tabs', async () => {
+    await harness.navigateByUrl('/products');
+    await type('Keychron Q1');
+
+    await click('a', 'Pricing');
+
+    expect(confirmSpy).not.toHaveBeenCalled();
+    expect(url()).toBe('/products/pricing');
   });
 
   it('lets the user leave without asking when nothing changed', async () => {
