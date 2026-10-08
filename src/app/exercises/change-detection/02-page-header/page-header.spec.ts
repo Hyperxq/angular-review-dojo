@@ -5,6 +5,7 @@ import { PageLayout } from './page-layout';
 import { OrdersPage, ProductsPage } from './pages';
 
 @Component({
+  selector: 'app-products-host',
   changeDetection: ChangeDetectionStrategy.Eager,
   imports: [PageLayout, ProductsPage],
   template: `<app-page-layout><app-products-page /></app-page-layout>`,
@@ -12,6 +13,7 @@ import { OrdersPage, ProductsPage } from './pages';
 class ProductsHost {}
 
 @Component({
+  selector: 'app-orders-host',
   changeDetection: ChangeDetectionStrategy.Eager,
   imports: [PageLayout, OrdersPage],
   template: `<app-page-layout><app-orders-page /></app-page-layout>`,
@@ -19,6 +21,7 @@ class ProductsHost {}
 class OrdersHost {}
 
 @Component({
+  selector: 'app-feedback-host',
   changeDetection: ChangeDetectionStrategy.Eager,
   imports: [FeedbackForm],
   template: `<app-feedback-form />`,
@@ -29,7 +32,7 @@ describe('L2 - page header', () => {
   it('renders the page with its title and no expression-changed error', async () => {
     const fixture = TestBed.createComponent(ProductsHost);
 
-    await expect(fixture.whenStable()).resolves.toBeUndefined();
+    await fixture.whenStable();
 
     expect(fixture.nativeElement.querySelector('h1').textContent).toBe('Products');
   });
@@ -47,7 +50,7 @@ describe('L2 - page header', () => {
   it('ties the feedback label to its text area, without an expression-changed error', async () => {
     const fixture = TestBed.createComponent(FeedbackHost);
 
-    await expect(fixture.whenStable()).resolves.toBeUndefined();
+    await fixture.whenStable();
 
     const el = fixture.nativeElement as HTMLElement;
     const label = el.querySelector('label')!;
