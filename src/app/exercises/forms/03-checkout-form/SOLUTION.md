@@ -15,8 +15,10 @@
 4. **The component's own `(submit)` handler called the API directly.** Nothing checked
    validity. The Signal Forms way is `submit(form, action)`, or the `formRoot` directive on the
    `<form>` plus `submission.action` in the form options: the action runs only when the form is
-   valid (pending async validators are awaited), it marks all fields touched first, and the
-   directive prevents the native submit. `submit()` also refuses re-entry while the previous submission is running.
+   not invalid, it marks all fields touched first, and the directive calls `preventDefault()` on the native
+   submit. (By default the check is `!invalid`, so a form with async validators still pending would run the
+   action; pass `ignoreValidators: 'none'` to `submit()` to require `valid`. It is the same trap as
+   `PENDING` in the reactive-forms L2 exercise.) `submit()` also refuses re-entry while the previous submission is running.
 
 ## The fix
 
