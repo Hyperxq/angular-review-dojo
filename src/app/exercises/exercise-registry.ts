@@ -100,6 +100,14 @@ export const EXERCISES: readonly Exercise[] = [
     loadComponent: () =>
       import('./rxjs-to-signals/02-variant-picker/variant-picker').then((m) => m.VariantPicker),
   },
+  {
+    topic: 'rxjs-to-signals',
+    level: 3,
+    slug: '03-product-page',
+    title: 'Product page',
+    loadComponent: () =>
+      import('./rxjs-to-signals/03-product-page/product-page').then((m) => m.ProductPage),
+  },
 ];
 
 export function routesFor(topic: Topic): Routes {
