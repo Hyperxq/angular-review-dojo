@@ -12,5 +12,9 @@ export const routes: Routes = [
     loadChildren: () =>
       import('./exercises/rxjs-to-signals/rxjs-to-signals.routes').then((m) => m.RXJS_TO_SIGNALS_ROUTES),
   },
+  {
+    path: 'routing',
+    loadChildren: () => import('./exercises/routing/routing.routes').then((m) => m.ROUTING_ROUTES),
+  },
   { path: '**', redirectTo: '' },
 ];
