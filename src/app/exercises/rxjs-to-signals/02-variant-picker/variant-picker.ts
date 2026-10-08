@@ -1,52 +1,40 @@
-import { AsyncPipe, CurrencyPipe } from '@angular/common';
-import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
-import { BehaviorSubject, ReplaySubject, combineLatest, map } from 'rxjs';
+import { CurrencyPipe } from '@angular/common';
+import { Component, computed, input, linkedSignal } from '@angular/core';
 import { Product } from '../../../core/models';
 import { variantsFor } from './variants';
 
 @Component({
   selector: 'app-variant-picker',
-  imports: [AsyncPipe, CurrencyPipe],
+  imports: [CurrencyPipe],
   template: `
-    @if (view$ | async; as view) {
-      <h2>{{ view.product.name }}</h2>
-      <div role="group" aria-label="Variant">
-        @for (variant of view.variants; track variant.id) {
-          <button
-            type="button"
-            [attr.data-variant]="variant.id"
-            [attr.aria-pressed]="variant.id === view.selected.id"
-            (click)="select(variant.id)"
-          >
-            {{ variant.label }}
-          </button>
-        }
-      </div>
-      <p id="price">{{ view.price | currency }}</p>
-    }
+    <h2>{{ product().name }}</h2>
+    <div role="group" aria-label="Variant">
+      @for (variant of variants(); track variant.id) {
+        <button
+          type="button"
+          [attr.data-variant]="variant.id"
+          [attr.aria-pressed]="variant.id === selected().id"
+          (click)="selectedId.set(variant.id)"
+        >
+          {{ variant.label }}
+        </button>
+      }
+    </div>
+    <p id="price">{{ price() | currency }}</p>
   `,
 })
-export class VariantPicker implements OnChanges {
-  @Input({ required: true }) product!: Product;
+export class VariantPicker {
+  readonly product = input.required<Product>();
 
-  private readonly product$ = new ReplaySubject<Product>(1);
-  private readonly selectedId$ = new BehaviorSubject<string | null>(null);
+  private readonly productId = computed(() => this.product().id);
 
-  protected readonly view$ = combineLatest([this.product$, this.selectedId$]).pipe(
-    map(([product, selectedId]) => {
-      const variants = variantsFor(product);
-      const selected = variants.find((v) => v.id === selectedId) ?? variants[0];
-      return { product, variants, selected, price: product.price + selected.priceDelta };
-    }),
+  protected readonly variants = computed(() => variantsFor(this.product()));
+  protected readonly selectedId = linkedSignal({
+    source: this.productId,
+    computation: () => 'standard',
+  });
+  protected readonly selected = computed(
+    () => this.variants().find((v) => v.id === this.selectedId()) ?? this.variants()[0],
   );
-
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes['product']) {
-      this.product$.next(this.product);
-    }
-  }
-
-  protected select(variantId: string) {
-    this.selectedId$.next(variantId);
-  }
+  protected readonly price = computed(() => this.product().price + this.selected().priceDelta);
 }
