@@ -335,6 +335,14 @@ export const EXERCISES: readonly Exercise[] = [
     title: 'Chart frame (view timing)',
     loadComponent: () => import('./lifecycle/02-chart-frame/chart-frame').then((m) => m.ChartFrame),
   },
+  {
+    topic: 'lifecycle',
+    level: 3,
+    slug: '03-list-widgets',
+    title: 'List widgets (inheritance and hooks)',
+    loadComponent: () =>
+      import('./lifecycle/03-list-widgets/list-widgets').then((m) => m.ListWidgets),
+  },
 ];
 
 export function routesFor(topic: Topic): Routes {
