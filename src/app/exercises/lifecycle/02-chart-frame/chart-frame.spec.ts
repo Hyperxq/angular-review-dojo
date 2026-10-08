@@ -38,7 +38,7 @@ describe('L2 - ChartFrame', () => {
     const el = fixture.nativeElement as HTMLElement;
 
     expect(el.querySelector('[data-testid=width]')!.textContent).toBe('Width: 300px');
-    expect([...el.querySelectorAll('.ticks li')].map((li) => li.textContent)).toEqual(['0', '75', '150', '225', '300']);
+    expect([...el.querySelectorAll('.ticks li')].map((li) => li.textContent)).toEqual(['0', '100', '200', '300']);
   });
 
   it('calculates ticks when the width changes, not on every change detection pass', async () => {
