@@ -1,32 +1,42 @@
 import { Component, inject, signal } from '@angular/core';
-import { FormField, email, form, min, required, validate } from '@angular/forms/signals';
+import { FormField, FormRoot, email, form, min, required, validate } from '@angular/forms/signals';
 import { CheckoutApi, CheckoutOrder } from './checkout-api';
 
 @Component({
   selector: 'app-checkout-form',
-  imports: [FormField],
+  imports: [FormField, FormRoot],
   template: `
     <h2>Checkout</h2>
-    <form (submit)="placeOrder($event)" novalidate>
+    <form [formRoot]="checkout">
       <label>Email <input type="email" [formField]="checkout.email" /></label>
-      @for (error of checkout.email().errors(); track error.kind) {
-        <p role="alert">{{ error.message }}</p>
+      @if (checkout.email().touched()) {
+        @for (error of checkout.email().errors(); track error.kind) {
+          <p role="alert">{{ error.message }}</p>
+        }
       }
 
       <label>Confirm email <input type="email" [formField]="checkout.confirmEmail" /></label>
-      @for (error of checkout.confirmEmail().errors(); track error.kind) {
-        <p role="alert">{{ error.message }}</p>
+      @if (checkout.confirmEmail().touched()) {
+        @for (error of checkout.confirmEmail().errors(); track error.kind) {
+          <p role="alert">{{ error.message }}</p>
+        }
       }
 
       <label>Quantity <input type="number" [formField]="checkout.quantity" /></label>
-      @for (error of checkout.quantity().errors(); track error.kind) {
-        <p role="alert">{{ error.message }}</p>
+      @if (checkout.quantity().touched()) {
+        @for (error of checkout.quantity().errors(); track error.kind) {
+          <p role="alert">{{ error.message }}</p>
+        }
       }
 
       <label><input type="checkbox" [formField]="checkout.wantsGift" /> This is a gift</label>
-      <label>Gift note <textarea [formField]="checkout.giftNote"></textarea></label>
-      @for (error of checkout.giftNote().errors(); track error.kind) {
-        <p role="alert">{{ error.message }}</p>
+      @if (checkout.wantsGift().value()) {
+        <label>Gift note <textarea [formField]="checkout.giftNote"></textarea></label>
+        @if (checkout.giftNote().touched()) {
+          @for (error of checkout.giftNote().errors(); track error.kind) {
+            <p role="alert">{{ error.message }}</p>
+          }
+        }
       }
 
       <button type="submit">Place order</button>
@@ -48,21 +58,27 @@ export class CheckoutForm {
   });
   protected readonly orderId = signal<number | null>(null);
 
-  protected readonly checkout = form(this.model, (path) => {
-    const accountEmail = this.model().email;
-
-    required(path.email, { message: 'Email is required' });
-    email(path.email, { message: 'Enter a valid email' });
-    validate(path.confirmEmail, ({ value }) =>
-      value() === accountEmail ? null : { kind: 'mismatch', message: 'Emails do not match' },
-    );
-    min(path.quantity, 1, { message: 'Order at least one unit' });
-    required(path.giftNote, { message: 'Write a gift note' });
-  });
-
-  protected async placeOrder(event: Event) {
-    event.preventDefault();
-    const receipt = await this.api.place(this.model());
-    this.orderId.set(receipt.orderId);
-  }
+  protected readonly checkout = form(
+    this.model,
+    (path) => {
+      required(path.email, { message: 'Email is required' });
+      email(path.email, { message: 'Enter a valid email' });
+      validate(path.confirmEmail, ({ value, valueOf }) =>
+        value() === valueOf(path.email) ? null : { kind: 'mismatch', message: 'Emails do not match' },
+      );
+      min(path.quantity, 1, { message: 'Order at least one unit' });
+      required(path.giftNote, {
+        message: 'Write a gift note',
+        when: ({ valueOf }) => valueOf(path.wantsGift),
+      });
+    },
+    {
+      submission: {
+        action: async () => {
+          const receipt = await this.api.place(this.model());
+          this.orderId.set(receipt.orderId);
+        },
+      },
+    },
+  );
 }
