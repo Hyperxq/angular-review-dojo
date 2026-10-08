@@ -92,6 +92,14 @@ export const EXERCISES: readonly Exercise[] = [
     loadComponent: () =>
       import('./rxjs-to-signals/01-cart-service/cart-summary').then((m) => m.CartSummary),
   },
+  {
+    topic: 'rxjs-to-signals',
+    level: 2,
+    slug: '02-variant-picker',
+    title: 'Variant picker',
+    loadComponent: () =>
+      import('./rxjs-to-signals/02-variant-picker/variant-picker').then((m) => m.VariantPicker),
+  },
 ];
 
 export function routesFor(topic: Topic): Routes {
