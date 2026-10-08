@@ -53,6 +53,14 @@ export const EXERCISES: readonly Exercise[] = [
     loadComponent: () =>
       import('./rxjs/04-category-browser/category-browser').then((m) => m.CategoryBrowser),
   },
+  {
+    topic: 'rxjs',
+    level: 5,
+    slug: '05-catalog-stats',
+    title: 'Catalog stats',
+    loadComponent: () =>
+      import('./rxjs/05-catalog-stats/catalog-stats').then((m) => m.CatalogStats),
+  },
 ];
 
 export function routesFor(topic: Topic): Routes {
