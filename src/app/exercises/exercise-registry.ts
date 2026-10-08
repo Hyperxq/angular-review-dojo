@@ -20,6 +20,8 @@ export interface Exercise {
   slug: string;
   title: string;
   loadComponent: () => Promise<Type<unknown>>;
+  /** Child routes rendered inside the component's outlet (routing exercises). */
+  loadChildren?: () => Promise<Routes>;
 }
 
 export const EXERCISES: readonly Exercise[] = [
@@ -116,6 +118,14 @@ export const EXERCISES: readonly Exercise[] = [
     loadComponent: () =>
       import('./rxjs-to-signals/04-quick-search/quick-search').then((m) => m.QuickSearch),
   },
+  {
+    topic: 'routing',
+    level: 1,
+    slug: '01-shop-routes',
+    title: 'Shop routes',
+    loadComponent: () => import('./routing/01-shop-routes/shop-shell').then((m) => m.ShopShell),
+    loadChildren: () => import('./routing/01-shop-routes/shop.routes').then((m) => m.SHOP_ROUTES),
+  },
 ];
 
 export function routesFor(topic: Topic): Routes {
@@ -123,5 +133,6 @@ export function routesFor(topic: Topic): Routes {
     path: e.slug,
     title: e.title,
     loadComponent: e.loadComponent,
+    ...(e.loadChildren && { loadChildren: e.loadChildren }),
   }));
 }
