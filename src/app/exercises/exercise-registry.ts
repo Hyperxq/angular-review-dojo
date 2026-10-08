@@ -227,6 +227,13 @@ export const EXERCISES: readonly Exercise[] = [
     loadComponent: () =>
       import('./directives/01-tooltip/product-actions').then((m) => m.ProductActions),
   },
+  {
+    topic: 'directives',
+    level: 2,
+    slug: '02-has-role',
+    title: 'Role-based sections',
+    loadComponent: () => import('./directives/02-has-role/admin-panel').then((m) => m.AdminPanel),
+  },
 ];
 
 export function routesFor(topic: Topic): Routes {
