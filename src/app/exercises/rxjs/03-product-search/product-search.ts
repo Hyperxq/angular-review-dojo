@@ -2,7 +2,7 @@ import { CurrencyPipe } from '@angular/common';
 import { Component, inject, signal } from '@angular/core';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { Subject, finalize, mergeMap, switchMap } from 'rxjs';
+import { Subject, debounceTime, distinctUntilChanged, exhaustMap, finalize, switchMap } from 'rxjs';
 import { Product } from '../../../core/models';
 import { ProductApi } from '../../../core/product-api';
 
@@ -38,14 +38,18 @@ export class ProductSearch {
   protected readonly lastSaved = signal<Product | undefined>(undefined);
 
   protected readonly results = toSignal(
-    this.term.valueChanges.pipe(mergeMap((term) => this.api.search(term))),
+    this.term.valueChanges.pipe(
+      debounceTime(300),
+      distinctUntilChanged(),
+      switchMap((term) => this.api.search(term)),
+    ),
     { initialValue: [] as Product[] },
   );
 
   constructor() {
     this.saveRequests
       .pipe(
-        switchMap((product) => {
+        exhaustMap((product) => {
           this.saving.set(true);
           return this.api.update(product).pipe(finalize(() => this.saving.set(false)));
         }),
