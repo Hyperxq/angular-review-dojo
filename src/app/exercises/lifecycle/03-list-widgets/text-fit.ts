@@ -1,4 +1,4 @@
-import { Component, ElementRef, afterNextRender, inject, input, signal } from '@angular/core';
+import { Component, ElementRef, afterRenderEffect, inject, input, signal } from '@angular/core';
 
 @Component({
   selector: 'app-text-fit',
@@ -11,7 +11,8 @@ export class TextFit {
   protected readonly width = signal(0);
 
   constructor() {
-    afterNextRender(() => {
+    afterRenderEffect(() => {
+      this.label();
       this.width.set(this.host.nativeElement.querySelector<HTMLElement>('.label')!.offsetWidth);
     });
   }

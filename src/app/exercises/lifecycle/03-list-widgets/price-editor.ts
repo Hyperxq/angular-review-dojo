@@ -1,4 +1,4 @@
-import { Component, effect, input, output, signal } from '@angular/core';
+import { Component, input, linkedSignal, output } from '@angular/core';
 
 @Component({
   selector: 'app-price-editor',
@@ -10,11 +10,5 @@ import { Component, effect, input, output, signal } from '@angular/core';
 export class PriceEditor {
   readonly price = input.required<number>();
   readonly saved = output<number>();
-  readonly draft = signal(0);
-
-  constructor() {
-    effect(() => {
-      this.draft.set(this.price());
-    });
-  }
+  readonly draft = linkedSignal(() => this.price());
 }
