@@ -19,18 +19,19 @@ export class AccountLayout {}
 
 @Component({
   selector: 'app-orders-page',
-  imports: [RouterLink],
+  imports: [RouterLink, RouterOutlet],
   template: `
     <h3>Orders for customer {{ customerId() }}</h3>
     <ul>
       @for (order of orders(); track order.id) {
         <li>
-          <a [routerLink]="['/orders', order.id]">Order #{{ order.id }}</a>
+          <a [routerLink]="[order.id]">Order #{{ order.id }}</a>
         </li>
       } @empty {
         <li>No orders yet</li>
       }
     </ul>
+    <router-outlet />
   `,
 })
 export class OrdersPage {
@@ -53,6 +54,7 @@ export class OrdersPage {
 })
 export class OrderDetailPage {
   private readonly router = inject(Router);
+  private readonly route = inject(ActivatedRoute);
 
   readonly orderId = input.required<string>();
   protected readonly order = computed(() =>
@@ -60,7 +62,7 @@ export class OrderDetailPage {
   );
 
   protected backToList() {
-    this.router.navigate(['orders']);
+    this.router.navigate(['..'], { relativeTo: this.route });
   }
 }
 
