@@ -37,6 +37,7 @@ Topics: RxJS (deep: L1–L8), Routing, Performance, Forms, Directives, Testing (
 - [ ] T4 — Forms L1–L3 (reactive + Signal Forms). Route: delegated.
 - [ ] T5 — Directives L1–L3. Route: delegated.
 - [ ] T6 — Testing (Vitest/TestBed) L1–L3. Route: delegated.
+- [ ] T8 — Change Detection track (playground + L1–L3). Route: delegated.
 - [ ] T7 — Root README: how to use the dojo, levels map, workflow.
 
 ## Acceptance criteria
