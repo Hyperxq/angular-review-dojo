@@ -1,19 +1,23 @@
-import { CurrencyPipe } from '@angular/common';
-import { Component, effect, inject, input } from '@angular/core';
+import { CurrencyPipe, NgOptimizedImage } from '@angular/common';
+import { Component, DestroyRef, effect, inject, input, signal, untracked } from '@angular/core';
 import { Product } from '../../../core/models';
 import { Analytics, SpotlightCart } from './spotlight-services';
 
 @Component({
   selector: 'app-product-spotlight',
-  imports: [CurrencyPipe],
+  imports: [CurrencyPipe, NgOptimizedImage],
+  host: {
+    '(window:offline)': 'online.set(false)',
+    '(window:online)': 'online.set(true)',
+  },
   template: `
-    @if (promoVisible) {
+    @if (promoVisible()) {
       <p role="status">Free shipping on orders over $50 this week</p>
     }
-    @if (!online) {
+    @if (!online()) {
       <p role="alert">You are offline. Prices may be out of date.</p>
     }
-    <img src="spotlight-hero.jpg" alt="Product on a desk" width="1200" height="600" />
+    <img ngSrc="spotlight-hero.jpg" alt="Product on a desk" width="1200" height="600" priority />
     <h2>{{ product().name }}</h2>
     <p>{{ product().price | currency }}</p>
     <button type="button" (click)="cart.add()">Add to cart ({{ cart.count() }})</button>
@@ -25,21 +29,18 @@ export class ProductSpotlight {
 
   readonly product = input.required<Product>();
 
-  protected promoVisible = true;
-  protected online = true;
+  protected readonly promoVisible = signal(true);
+  protected readonly online = signal(true);
 
   constructor() {
-    setTimeout(() => {
-      this.promoVisible = false;
-    }, 3000);
-    window.addEventListener('offline', () => (this.online = false));
-    window.addEventListener('online', () => (this.online = true));
+    const promoTimer = setTimeout(() => this.promoVisible.set(false), 3000);
+    inject(DestroyRef).onDestroy(() => clearTimeout(promoTimer));
 
     effect(() => {
-      this.analytics.track('spotlight_view', {
-        productId: this.product().id,
-        cartSize: this.cart.count(),
-      });
+      const productId = this.product().id;
+      untracked(() =>
+        this.analytics.track('spotlight_view', { productId, cartSize: this.cart.count() }),
+      );
     });
   }
 }
