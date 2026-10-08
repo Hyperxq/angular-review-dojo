@@ -1,7 +1,7 @@
 import { CurrencyPipe } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { BehaviorSubject, catchError, map, of, retry, switchMap } from 'rxjs';
+import { BehaviorSubject, catchError, map, of, retry, switchMap, timer } from 'rxjs';
 import { Product } from '../../../core/models';
 import { ProductApi } from '../../../core/product-api';
 
@@ -41,12 +41,12 @@ export class CategoryBrowser {
   protected readonly view = toSignal(
     this.selected$.pipe(
       switchMap((category) =>
-        this.api
-          .byCategory(category)
-          .pipe(map((products): ViewState => ({ status: 'ready', products }))),
+        this.api.byCategory(category).pipe(
+          retry({ count: 3, delay: (_error, attempt) => timer(250 * 2 ** (attempt - 1)) }),
+          map((products): ViewState => ({ status: 'ready', products })),
+          catchError(() => of<ViewState>({ status: 'error', products: [] })),
+        ),
       ),
-      retry(3),
-      catchError(() => of<ViewState>({ status: 'error', products: [] })),
     ),
     { initialValue: { status: 'loading', products: [] } as ViewState },
   );
