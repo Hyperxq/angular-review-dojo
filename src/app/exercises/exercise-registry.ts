@@ -179,6 +179,14 @@ export const EXERCISES: readonly Exercise[] = [
     loadComponent: () =>
       import('./performance/02-order-summary/order-page').then((m) => m.OrderPage),
   },
+  {
+    topic: 'performance',
+    level: 3,
+    slug: '03-product-spotlight',
+    title: 'Product spotlight',
+    loadComponent: () =>
+      import('./performance/03-product-spotlight/product-spotlight').then((m) => m.ProductSpotlight),
+  },
 ];
 
 export function routesFor(topic: Topic): Routes {
