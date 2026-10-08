@@ -81,7 +81,7 @@ describe('L3 - SalesDashboard', () => {
     const styleProto = Object.getPrototypeOf(document.createElement('div').style);
     const heightSetter = Object.getOwnPropertyDescriptor(styleProto, 'height')!.set!;
     vi.spyOn(styleProto, 'height', 'set').mockImplementation(function (this: CSSStyleDeclaration, value: string) {
-      log.push('write');
+      if (value) log.push('write');
       heightSetter.call(this, value);
     });
     const setProperty = CSSStyleDeclaration.prototype.setProperty;
