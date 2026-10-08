@@ -204,6 +204,13 @@ export const EXERCISES: readonly Exercise[] = [
     title: 'Profile form',
     loadComponent: () => import('./forms/01-profile-form/profile-form').then((m) => m.ProfileForm),
   },
+  {
+    topic: 'forms',
+    level: 2,
+    slug: '02-order-form',
+    title: 'Order form',
+    loadComponent: () => import('./forms/02-order-form/order-form').then((m) => m.OrderForm),
+  },
 ];
 
 export function routesFor(topic: Topic): Routes {
