@@ -187,6 +187,16 @@ export const EXERCISES: readonly Exercise[] = [
     loadComponent: () =>
       import('./performance/03-product-spotlight/product-spotlight').then((m) => m.ProductSpotlight),
   },
+  {
+    topic: 'performance',
+    level: 4,
+    slug: '04-product-page',
+    title: 'Product page loading',
+    loadComponent: () =>
+      import('./performance/04-product-page/product-shell').then((m) => m.ProductPageShell),
+    loadChildren: () =>
+      import('./performance/04-product-page/catalog.routes').then((m) => m.CATALOG_ROUTES),
+  },
 ];
 
 export function routesFor(topic: Topic): Routes {
