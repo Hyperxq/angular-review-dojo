@@ -197,6 +197,13 @@ export const EXERCISES: readonly Exercise[] = [
     loadChildren: () =>
       import('./performance/04-product-page/catalog.routes').then((m) => m.CATALOG_ROUTES),
   },
+  {
+    topic: 'forms',
+    level: 1,
+    slug: '01-profile-form',
+    title: 'Profile form',
+    loadComponent: () => import('./forms/01-profile-form/profile-form').then((m) => m.ProfileForm),
+  },
 ];
 
 export function routesFor(topic: Topic): Routes {

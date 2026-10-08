@@ -21,5 +21,9 @@ export const routes: Routes = [
     loadChildren: () =>
       import('./exercises/performance/performance.routes').then((m) => m.PERFORMANCE_ROUTES),
   },
+  {
+    path: 'forms',
+    loadChildren: () => import('./exercises/forms/forms.routes').then((m) => m.FORMS_ROUTES),
+  },
   { path: '**', redirectTo: '' },
 ];
