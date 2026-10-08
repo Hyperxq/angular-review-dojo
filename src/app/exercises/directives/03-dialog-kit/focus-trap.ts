@@ -1,4 +1,4 @@
-import { Directive, ElementRef, afterNextRender, inject, input } from '@angular/core';
+import { DestroyRef, Directive, ElementRef, afterNextRender, inject, input } from '@angular/core';
 
 const FOCUSABLE = 'a[href], button:not([disabled]), input:not([disabled]), select, textarea, [tabindex]:not([tabindex="-1"])';
 
@@ -11,25 +11,28 @@ const FOCUSABLE = 'a[href], button:not([disabled]), input:not([disabled]), selec
 })
 export class FocusTrap {
   private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
-  private focusable: HTMLElement[] = [];
 
   readonly enabled = input(true);
 
   constructor() {
-    afterNextRender(() => {
-      this.focusable = [...this.host.nativeElement.querySelectorAll<HTMLElement>(FOCUSABLE)];
-      this.focusable[0]?.focus();
-    });
+    const opener = document.activeElement as HTMLElement | null;
+    inject(DestroyRef).onDestroy(() => opener?.focus());
+    afterNextRender(() => this.focusable()[0]?.focus());
   }
 
   protected wrap(event: Event, backwards: boolean) {
-    if (!this.enabled() || this.focusable.length === 0) {
+    const controls = this.focusable();
+    if (!this.enabled() || controls.length === 0) {
       return;
     }
-    const edge = backwards ? this.focusable[0] : this.focusable[this.focusable.length - 1];
+    const edge = backwards ? controls[0] : controls[controls.length - 1];
     if (document.activeElement === edge) {
       event.preventDefault();
-      (backwards ? this.focusable[this.focusable.length - 1] : this.focusable[0]).focus();
+      (backwards ? controls[controls.length - 1] : controls[0]).focus();
     }
+  }
+
+  private focusable() {
+    return [...this.host.nativeElement.querySelectorAll<HTMLElement>(FOCUSABLE)];
   }
 }

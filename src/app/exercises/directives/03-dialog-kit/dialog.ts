@@ -5,8 +5,8 @@ import { FocusTrap } from './focus-trap';
 @Component({
   selector: 'app-dialog',
   hostDirectives: [
-    { directive: FocusTrap, inputs: ['enabled'] },
-    { directive: ClickOutside, inputs: ['enabled'], outputs: ['clickOutside: dismiss'] },
+    { directive: FocusTrap, inputs: ['enabled: trapFocus'] },
+    { directive: ClickOutside, inputs: ['enabled: closeOnOutsideClick'], outputs: ['clickOutside: dismiss'] },
   ],
   template: `<div role="dialog" aria-modal="true"><ng-content /></div>`,
 })

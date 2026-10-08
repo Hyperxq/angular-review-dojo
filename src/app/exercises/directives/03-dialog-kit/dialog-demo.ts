@@ -9,7 +9,7 @@ import { Dialog } from './dialog';
     <p id="outside">Page content</p>
 
     @if (open()) {
-      <app-dialog [enabled]="dismissOnOutside()" (dismiss)="open.set(false)">
+      <app-dialog [closeOnOutsideClick]="dismissOnOutside()" (dismiss)="open.set(false)">
         <h3>Settings</h3>
         <button type="button">First option</button>
         <label><input type="checkbox" [checked]="dismissOnOutside()" (change)="dismissOnOutside.set(!dismissOnOutside())" /> Close on outside click</label>
