@@ -1,11 +1,10 @@
-import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { FeedbackForm } from './feedback-form';
 import { PageLayout } from './page-layout';
 import { OrdersPage, ProductsPage } from './pages';
 
 @Component({
   selector: 'app-pages-demo',
-  changeDetection: ChangeDetectionStrategy.Default,
   imports: [PageLayout, ProductsPage, OrdersPage, FeedbackForm],
   template: `
     <button type="button" (click)="page.set('products')">Products</button>

@@ -1,8 +1,9 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { Component } from '@angular/core';
+
+let nextId = 0;
 
 @Component({
   selector: 'app-feedback-form',
-  changeDetection: ChangeDetectionStrategy.Default,
   template: `
     <label [for]="fieldId">Tell us what you think</label>
     <textarea [id]="fieldId" rows="3"></textarea>
@@ -10,9 +11,5 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
   `,
 })
 export class FeedbackForm {
-  private seq = 0;
-
-  protected get fieldId() {
-    return `feedback-${++this.seq}`;
-  }
+  protected readonly fieldId = `feedback-${nextId++}`;
 }
