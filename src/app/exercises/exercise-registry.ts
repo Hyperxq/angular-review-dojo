@@ -256,6 +256,13 @@ export const EXERCISES: readonly Exercise[] = [
     loadComponent: () =>
       import('./testing/02-place-order/place-order-demo').then((m) => m.PlaceOrderDemo),
   },
+  {
+    topic: 'testing',
+    level: 3,
+    slug: '03-cart-suite',
+    title: 'Cart suite (flaky and brittle)',
+    loadComponent: () => import('./testing/03-cart-suite/cart-demo').then((m) => m.CartDemo),
+  },
 ];
 
 export function routesFor(topic: Topic): Routes {
