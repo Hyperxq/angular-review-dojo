@@ -313,6 +313,14 @@ export const EXERCISES: readonly Exercise[] = [
     title: 'Tile registry (retention)',
     loadComponent: () => import('./memory/02-tile-registry/tiles-demo').then((m) => m.TilesDemo),
   },
+  {
+    topic: 'memory',
+    level: 3,
+    slug: '03-sales-dashboard',
+    title: 'Sales dashboard (third-party widget)',
+    loadComponent: () =>
+      import('./memory/03-sales-dashboard/dashboard-demo').then((m) => m.DashboardDemo),
+  },
 ];
 
 export function routesFor(topic: Topic): Routes {
