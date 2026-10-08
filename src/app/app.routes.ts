@@ -30,5 +30,9 @@ export const routes: Routes = [
     loadChildren: () =>
       import('./exercises/directives/directives.routes').then((m) => m.DIRECTIVES_ROUTES),
   },
+  {
+    path: 'testing',
+    loadChildren: () => import('./exercises/testing/testing.routes').then((m) => m.TESTING_ROUTES),
+  },
   { path: '**', redirectTo: '' },
 ];
