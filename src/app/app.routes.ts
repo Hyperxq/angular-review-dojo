@@ -41,5 +41,9 @@ export const routes: Routes = [
         (m) => m.CHANGE_DETECTION_ROUTES,
       ),
   },
+  {
+    path: 'memory',
+    loadChildren: () => import('./exercises/memory/memory.routes').then((m) => m.MEMORY_ROUTES),
+  },
   { path: '**', redirectTo: '' },
 ];
