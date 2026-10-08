@@ -272,6 +272,14 @@ export const EXERCISES: readonly Exercise[] = [
     loadComponent: () =>
       import('./change-detection/00-playground/playground').then((m) => m.Playground),
   },
+  {
+    topic: 'change-detection',
+    level: 1,
+    slug: '01-order-lines',
+    title: 'Order lines',
+    loadComponent: () =>
+      import('./change-detection/01-order-lines/order-editor').then((m) => m.OrderEditor),
+  },
 ];
 
 export function routesFor(topic: Topic): Routes {
