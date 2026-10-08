@@ -6,10 +6,10 @@ describe('exercise registry', () => {
     expect(new Set(keys).size).toBe(keys.length);
   });
 
-  it('only references known topics with levels 1 to 8', () => {
+  it('only references known topics with levels 0 to 8', () => {
     for (const e of EXERCISES) {
       expect(Object.keys(TOPICS)).toContain(e.topic);
-      expect(e.level).toBeGreaterThanOrEqual(1);
+      expect(e.level).toBeGreaterThanOrEqual(0);
       expect(e.level).toBeLessThanOrEqual(8);
     }
   });

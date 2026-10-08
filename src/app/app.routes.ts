@@ -34,5 +34,12 @@ export const routes: Routes = [
     path: 'testing',
     loadChildren: () => import('./exercises/testing/testing.routes').then((m) => m.TESTING_ROUTES),
   },
+  {
+    path: 'change-detection',
+    loadChildren: () =>
+      import('./exercises/change-detection/change-detection.routes').then(
+        (m) => m.CHANGE_DETECTION_ROUTES,
+      ),
+  },
   { path: '**', redirectTo: '' },
 ];
