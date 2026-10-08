@@ -62,7 +62,8 @@ describe('L3 - list widgets', () => {
       const request = new Subject<unknown[]>();
       api.list.mockReturnValue(request);
       const fixture = TestBed.createComponent(FeaturedList);
-      await fixture.whenStable();
+      fixture.detectChanges();
+      await new Promise((resolve) => setTimeout(resolve));
       expect(request.observed).toBe(true);
 
       fixture.destroy();
