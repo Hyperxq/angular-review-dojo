@@ -219,6 +219,14 @@ export const EXERCISES: readonly Exercise[] = [
     loadComponent: () =>
       import('./forms/03-checkout-form/checkout-form').then((m) => m.CheckoutForm),
   },
+  {
+    topic: 'directives',
+    level: 1,
+    slug: '01-tooltip',
+    title: 'Tooltip and highlight',
+    loadComponent: () =>
+      import('./directives/01-tooltip/product-actions').then((m) => m.ProductActions),
+  },
 ];
 
 export function routesFor(topic: Topic): Routes {
