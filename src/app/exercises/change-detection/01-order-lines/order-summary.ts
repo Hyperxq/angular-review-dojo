@@ -1,5 +1,5 @@
 import { CurrencyPipe } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { Component, computed, input } from '@angular/core';
 import { OrderLine } from './order-line';
 
 @Component({
@@ -7,18 +7,15 @@ import { OrderLine } from './order-line';
   imports: [CurrencyPipe],
   template: `
     <p data-testid="summary">
-      {{ lines.length }} lines, {{ itemCount() }} items, total {{ total() | currency }}
+      {{ lines().length }} lines, {{ itemCount() }} items, total {{ total() | currency }}
     </p>
   `,
 })
 export class OrderSummary {
-  @Input({ required: true }) lines: OrderLine[] = [];
+  readonly lines = input.required<OrderLine[]>();
 
-  protected itemCount() {
-    return this.lines.reduce((n, line) => n + line.quantity, 0);
-  }
-
-  protected total() {
-    return this.lines.reduce((sum, line) => sum + line.price * line.quantity, 0);
-  }
+  protected readonly itemCount = computed(() => this.lines().reduce((n, line) => n + line.quantity, 0));
+  protected readonly total = computed(() =>
+    this.lines().reduce((sum, line) => sum + line.price * line.quantity, 0),
+  );
 }
