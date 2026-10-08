@@ -16,5 +16,10 @@ export const routes: Routes = [
     path: 'routing',
     loadChildren: () => import('./exercises/routing/routing.routes').then((m) => m.ROUTING_ROUTES),
   },
+  {
+    path: 'performance',
+    loadChildren: () =>
+      import('./exercises/performance/performance.routes').then((m) => m.PERFORMANCE_ROUTES),
+  },
   { path: '**', redirectTo: '' },
 ];
