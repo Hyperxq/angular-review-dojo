@@ -234,6 +234,13 @@ export const EXERCISES: readonly Exercise[] = [
     title: 'Role-based sections',
     loadComponent: () => import('./directives/02-has-role/admin-panel').then((m) => m.AdminPanel),
   },
+  {
+    topic: 'directives',
+    level: 3,
+    slug: '03-dialog-kit',
+    title: 'Dialog kit (host directives)',
+    loadComponent: () => import('./directives/03-dialog-kit/dialog-demo').then((m) => m.DialogDemo),
+  },
 ];
 
 export function routesFor(topic: Topic): Routes {
