@@ -16,15 +16,16 @@ export class CartStore {
 
   readonly items = this.state.asReadonly();
   readonly count = computed(() => this.state().reduce((n, line) => n + line.quantity, 0));
-  readonly total = computed(() =>
-    this.state().reduce((sum, line) => sum + line.price * line.quantity, 0),
+  readonly total = computed(
+    () => Math.round(this.state().reduce((sum, line) => sum + line.price * line.quantity, 0) * 100) / 100,
   );
 
   add(product: { id: number; name: string; price: number }) {
-    this.state.update((lines) => [
-      ...lines,
-      { productId: product.id, name: product.name, price: product.price, quantity: 1 },
-    ]);
+    this.state.update((lines) =>
+      lines.some((line) => line.productId === product.id)
+        ? lines.map((line) => (line.productId === product.id ? { ...line, quantity: line.quantity + 1 } : line))
+        : [...lines, { productId: product.id, name: product.name, price: product.price, quantity: 1 }],
+    );
     this.persist();
   }
 
