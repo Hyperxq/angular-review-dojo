@@ -21,7 +21,15 @@ export interface Exercise {
   loadComponent: () => Promise<Type<unknown>>;
 }
 
-export const EXERCISES: readonly Exercise[] = [];
+export const EXERCISES: readonly Exercise[] = [
+  {
+    topic: 'rxjs',
+    level: 1,
+    slug: '01-product-list',
+    title: 'Product list',
+    loadComponent: () => import('./rxjs/01-product-list/product-list').then((m) => m.ProductList),
+  },
+];
 
 export function routesFor(topic: Topic): Routes {
   return EXERCISES.filter((e) => e.topic === topic).map((e) => ({
