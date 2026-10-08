@@ -1,19 +1,20 @@
 import { CurrencyPipe } from '@angular/common';
-import { Component, effect, inject, input, numberAttribute, signal } from '@angular/core';
-import { Category, Product } from '../../../core/models';
+import { Component, inject, input, numberAttribute } from '@angular/core';
+import { rxResource } from '@angular/core/rxjs-interop';
+import { forkJoin, map, switchMap } from 'rxjs';
 import { ProductApi } from '../../../core/product-api';
 
 @Component({
   selector: 'app-product-detail',
   imports: [CurrencyPipe],
   template: `
-    @if (product(); as product) {
+    @if (detail.value(); as detail) {
       <article>
-        <h2>{{ product.name }}</h2>
-        <p>{{ product.price | currency }} in {{ category()?.name }}</p>
+        <h2>{{ detail.product.name }}</h2>
+        <p>{{ detail.product.price | currency }} in {{ detail.category.name }}</p>
         <h3>Related products</h3>
         <ul>
-          @for (item of related(); track item.id) {
+          @for (item of detail.related; track item.id) {
             <li>{{ item.name }}</li>
           }
         </ul>
@@ -26,22 +27,22 @@ export class ProductDetail {
 
   readonly id = input.required({ transform: numberAttribute });
 
-  protected readonly product = signal<Product | undefined>(undefined);
-  protected readonly category = signal<Category | undefined>(undefined);
-  protected readonly related = signal<Product[]>([]);
-
-  constructor() {
-    effect(() => {
-      const id = this.id();
-      this.api.get(id).subscribe((product) => {
-        this.product.set(product);
-        this.api.getCategory(product.category).subscribe((category) => {
-          this.category.set(category);
-          this.api.byCategory(category.id).subscribe((products) => {
-            this.related.set(products.filter((p) => p.id !== product.id));
-          });
-        });
-      });
-    });
-  }
+  protected readonly detail = rxResource({
+    params: () => this.id(),
+    stream: ({ params: id }) =>
+      this.api.get(id).pipe(
+        switchMap((product) =>
+          forkJoin({
+            category: this.api.getCategory(product.category),
+            related: this.api.byCategory(product.category),
+          }).pipe(
+            map(({ category, related }) => ({
+              product,
+              category,
+              related: related.filter((p) => p.id !== product.id),
+            })),
+          ),
+        ),
+      ),
+  });
 }
