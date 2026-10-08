@@ -1,9 +1,13 @@
 import { DatePipe } from '@angular/common';
-import { Component, OnDestroy, OnInit, Renderer2, inject, signal } from '@angular/core';
+import { Component, DestroyRef, inject, signal } from '@angular/core';
 
 @Component({
   selector: 'app-viewport-info',
   imports: [DatePipe],
+  host: {
+    '(window:resize)': 'measure()',
+    '(document:keydown)': 'lastKey.set($event.key)',
+  },
   template: `
     <h2>Viewport</h2>
     <p data-testid="size">{{ width() }} x {{ height() }}</p>
@@ -11,28 +15,19 @@ import { Component, OnDestroy, OnInit, Renderer2, inject, signal } from '@angula
     <p data-testid="clock">{{ now() | date: 'mediumTime' }}</p>
   `,
 })
-export class ViewportInfo implements OnInit, OnDestroy {
-  private readonly renderer = inject(Renderer2);
-
+export class ViewportInfo {
   protected readonly width = signal(window.innerWidth);
   protected readonly height = signal(window.innerHeight);
   protected readonly lastKey = signal('');
   protected readonly now = signal(new Date());
 
-  ngOnInit() {
-    window.addEventListener('resize', () => {
-      this.width.set(window.innerWidth);
-      this.height.set(window.innerHeight);
-    });
-
-    this.renderer.listen('document', 'keydown', (event: KeyboardEvent) => {
-      this.lastKey.set(event.key);
-    });
-
-    setInterval(() => this.now.set(new Date()), 1000);
+  constructor() {
+    const clock = setInterval(() => this.now.set(new Date()), 1000);
+    inject(DestroyRef).onDestroy(() => clearInterval(clock));
   }
 
-  ngOnDestroy() {
-    console.debug('ViewportInfo destroyed');
+  protected measure() {
+    this.width.set(window.innerWidth);
+    this.height.set(window.innerHeight);
   }
 }
