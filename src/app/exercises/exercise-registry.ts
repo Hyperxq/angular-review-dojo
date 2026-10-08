@@ -84,6 +84,14 @@ export const EXERCISES: readonly Exercise[] = [
     title: 'Cart store',
     loadComponent: () => import('./rxjs/08-cart-store/cart-panel').then((m) => m.CartPanel),
   },
+  {
+    topic: 'rxjs-to-signals',
+    level: 1,
+    slug: '01-cart-service',
+    title: 'Cart service',
+    loadComponent: () =>
+      import('./rxjs-to-signals/01-cart-service/cart-summary').then((m) => m.CartSummary),
+  },
 ];
 
 export function routesFor(topic: Topic): Routes {
