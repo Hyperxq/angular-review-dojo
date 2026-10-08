@@ -3,6 +3,7 @@ import { Type } from '@angular/core';
 
 export const TOPICS = {
   rxjs: 'RxJS',
+  'rxjs-to-signals': 'RxJS to Signals',
   routing: 'Routing',
   performance: 'Performance',
   forms: 'Forms',
@@ -82,6 +83,14 @@ export const EXERCISES: readonly Exercise[] = [
     slug: '08-cart-store',
     title: 'Cart store',
     loadComponent: () => import('./rxjs/08-cart-store/cart-panel').then((m) => m.CartPanel),
+  },
+  {
+    topic: 'rxjs-to-signals',
+    level: 1,
+    slug: '01-cart-service',
+    title: 'Cart service',
+    loadComponent: () =>
+      import('./rxjs-to-signals/01-cart-service/cart-summary').then((m) => m.CartSummary),
   },
 ];
 
