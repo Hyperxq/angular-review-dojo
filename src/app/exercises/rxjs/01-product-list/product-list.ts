@@ -1,6 +1,7 @@
 import { CurrencyPipe } from '@angular/common';
-import { Component, OnInit, inject } from '@angular/core';
-import { Product } from '../../../core/models';
+import { Component, inject } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { merge, of, switchMap } from 'rxjs';
 import { ProductApi } from '../../../core/product-api';
 import { StockFeed } from '../../../core/stock-feed';
 
@@ -9,9 +10,7 @@ import { StockFeed } from '../../../core/stock-feed';
   imports: [CurrencyPipe],
   template: `
     <h2>Products</h2>
-    @if (loading) {
-      <p>Loading products…</p>
-    } @else {
+    @if (products(); as products) {
       <ul>
         @for (product of products; track product.id) {
           <li>
@@ -21,28 +20,16 @@ import { StockFeed } from '../../../core/stock-feed';
           </li>
         }
       </ul>
+    } @else {
+      <p>Loading products…</p>
     }
   `,
 })
-export class ProductList implements OnInit {
+export class ProductList {
   private readonly api = inject(ProductApi);
   private readonly stockFeed = inject(StockFeed);
 
-  protected products: Product[] = [];
-  protected loading = true;
-
-  ngOnInit() {
-    this.load();
-    this.stockFeed.changes$.subscribe(() => {
-      console.log('Stock changed, reloading products');
-      this.load();
-    });
-  }
-
-  private load() {
-    this.api.list().subscribe((products) => {
-      this.products = products;
-      this.loading = false;
-    });
-  }
+  protected readonly products = toSignal(
+    merge(of(undefined), this.stockFeed.changes$).pipe(switchMap(() => this.api.list())),
+  );
 }
