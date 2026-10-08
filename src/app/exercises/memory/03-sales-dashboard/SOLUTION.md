@@ -36,11 +36,11 @@ protected readonly stats = computed(() => this.statsService.compute(this.series(
 - **Trap fixed on the way:** `effect(() => this.chart?.update(this.series()))` would never re-run: while `this.chart` is
   `undefined` the optional call skips evaluating its arguments, so `series()` is never read and no dependency is registered.
   Read signals first, then use them: `const data = this.series(); this.chart?.update(data);`.
-- **Choosing between `computed`, a worker and chunking** for the heavy statistics: `computed` is right here because the cost
-  is incurred once per data change and 160k iterations is a few ms of real work on a typical machine once per refresh,
-  not once per keystroke. If a single computation took hundreds of milliseconds it would still block the main thread: then move
-  it to a Web Worker (best, off-thread) or chunk it (`scheduler.yield()` / `setTimeout` slices) and show progress. Memoise first,
-  it is the cheapest fix with the largest effect.
+- **Choosing between `computed`, a worker and chunking** for the heavy statistics: `computed` is the first fix because it
+  removes the repeated work (the cost is paid once per data change instead of once per keystroke). Measure the remaining cost
+  with a Performance recording: if a single computation still exceeds ~50 ms it blocks the main thread on every data change, and
+  the next step is a Web Worker (off-thread, best) or chunking the loop into slices that yield to the browser, with a progress
+  state. Memoise first: it is the cheapest change with the largest effect.
 
 ## Modern Angular takeaway
 
