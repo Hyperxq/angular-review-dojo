@@ -1,4 +1,4 @@
-import { Observable, combineLatest, exhaustMap, map } from 'rxjs';
+import { Observable, exhaustMap, map, withLatestFrom } from 'rxjs';
 import { Order, OrderReceipt, Product } from '../../../core/models';
 
 export interface OrderLineDraft {
@@ -7,10 +7,7 @@ export interface OrderLineDraft {
 }
 
 export function lineTotal$(line$: Observable<OrderLineDraft>): Observable<number> {
-  return combineLatest([
-    line$.pipe(map((line) => line.product)),
-    line$.pipe(map((line) => line.quantity)),
-  ]).pipe(map(([product, quantity]) => product.price * quantity));
+  return line$.pipe(map((line) => line.product.price * line.quantity));
 }
 
 export function placeOrder$(
@@ -18,7 +15,8 @@ export function placeOrder$(
   line$: Observable<OrderLineDraft>,
   submit: (order: Order) => Observable<OrderReceipt>,
 ): Observable<OrderReceipt> {
-  return combineLatest([click$, line$]).pipe(
+  return click$.pipe(
+    withLatestFrom(line$),
     exhaustMap(([, line]) =>
       submit({ lines: [{ productId: line.product.id, quantity: line.quantity }] }),
     ),
