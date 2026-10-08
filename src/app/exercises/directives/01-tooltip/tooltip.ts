@@ -1,30 +1,31 @@
-import { Directive, ElementRef, HostListener, Input, OnInit, inject } from '@angular/core';
+import { DestroyRef, Directive, inject, input } from '@angular/core';
 
-@Directive({ selector: '[appTooltip]' })
-export class Tooltip implements OnInit {
-  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
+@Directive({
+  selector: '[appTooltip]',
+  host: {
+    '(mouseenter)': 'show()',
+    '(mouseleave)': 'hide()',
+    '(document:keydown.escape)': 'hide()',
+  },
+})
+export class Tooltip {
   private tip: HTMLElement | null = null;
 
-  @Input('appTooltip') text = '';
+  readonly text = input('', { alias: 'appTooltip' });
 
-  ngOnInit() {
-    document.addEventListener('keydown', (event) => {
-      if (event.key === 'Escape') {
-        this.hide();
-      }
-    });
+  constructor() {
+    inject(DestroyRef).onDestroy(() => this.hide());
   }
 
-  @HostListener('mouseenter')
-  show() {
+  protected show() {
+    this.hide();
     this.tip = document.createElement('div');
     this.tip.setAttribute('role', 'tooltip');
-    this.tip.innerHTML = this.text;
+    this.tip.textContent = this.text();
     document.body.appendChild(this.tip);
   }
 
-  @HostListener('mouseleave')
-  hide() {
+  protected hide() {
     this.tip?.remove();
     this.tip = null;
   }

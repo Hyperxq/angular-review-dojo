@@ -1,12 +1,9 @@
-import { Directive, ElementRef, inject, input } from '@angular/core';
+import { Directive, input } from '@angular/core';
 
-@Directive({ selector: '[appHighlight]' })
+@Directive({
+  selector: '[appHighlight]',
+  host: { '[style.backgroundColor]': 'color()' },
+})
 export class Highlight {
-  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
-
   readonly color = input('#fff3a3');
-
-  constructor() {
-    this.host.nativeElement.style.backgroundColor = this.color();
-  }
 }
