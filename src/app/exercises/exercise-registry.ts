@@ -171,6 +171,14 @@ export const EXERCISES: readonly Exercise[] = [
     loadComponent: () =>
       import('./performance/01-product-grid/product-grid').then((m) => m.ProductGrid),
   },
+  {
+    topic: 'performance',
+    level: 2,
+    slug: '02-order-summary',
+    title: 'Order summary',
+    loadComponent: () =>
+      import('./performance/02-order-summary/order-page').then((m) => m.OrderPage),
+  },
 ];
 
 export function routesFor(topic: Topic): Routes {
