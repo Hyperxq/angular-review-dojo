@@ -10,6 +10,8 @@ export const TOPICS = {
   directives: 'Directives',
   testing: 'Testing',
   'change-detection': 'Change detection',
+  memory: 'Memory and profiling',
+  lifecycle: 'Lifecycle',
 } as const;
 
 export type Topic = keyof typeof TOPICS;
@@ -295,6 +297,14 @@ export const EXERCISES: readonly Exercise[] = [
     title: 'Live quote (zoneless migration)',
     loadComponent: () =>
       import('./change-detection/03-live-quote/live-quote').then((m) => m.LiveQuote),
+  },
+  {
+    topic: 'memory',
+    level: 1,
+    slug: '01-viewport-info',
+    title: 'Viewport info (listeners and timers)',
+    loadComponent: () =>
+      import('./memory/01-viewport-info/viewport-info').then((m) => m.ViewportInfo),
   },
 ];
 
