@@ -9,6 +9,7 @@ export const TOPICS = {
   forms: 'Forms',
   directives: 'Directives',
   testing: 'Testing',
+  'change-detection': 'Change detection',
 } as const;
 
 export type Topic = keyof typeof TOPICS;
@@ -262,6 +263,14 @@ export const EXERCISES: readonly Exercise[] = [
     slug: '03-cart-suite',
     title: 'Cart suite (flaky and brittle)',
     loadComponent: () => import('./testing/03-cart-suite/cart-demo').then((m) => m.CartDemo),
+  },
+  {
+    topic: 'change-detection',
+    level: 0,
+    slug: '00-playground',
+    title: 'Playground (read EXPLAINER.md)',
+    loadComponent: () =>
+      import('./change-detection/00-playground/playground').then((m) => m.Playground),
   },
 ];
 
