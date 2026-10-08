@@ -306,6 +306,13 @@ export const EXERCISES: readonly Exercise[] = [
     loadComponent: () =>
       import('./memory/01-viewport-info/viewport-info').then((m) => m.ViewportInfo),
   },
+  {
+    topic: 'memory',
+    level: 2,
+    slug: '02-tile-registry',
+    title: 'Tile registry (retention)',
+    loadComponent: () => import('./memory/02-tile-registry/tiles-demo').then((m) => m.TilesDemo),
+  },
 ];
 
 export function routesFor(topic: Topic): Routes {
