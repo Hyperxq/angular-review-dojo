@@ -17,7 +17,7 @@ export class BadgeDemo {
   protected readonly product = signal<Product>({ ...SEED_PRODUCTS[0] });
 
   protected sellOne() {
-    this.product().stock--;
+    this.product.update((p) => ({ ...p, stock: p.stock - 1 }));
   }
 
   protected next() {
