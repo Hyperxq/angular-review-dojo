@@ -1,4 +1,16 @@
-import { AfterViewInit, Component, ElementRef, effect, inject, input, signal, viewChild } from '@angular/core';
+import {
+  DestroyRef,
+  Component,
+  ElementRef,
+  afterNextRender,
+  computed,
+  effect,
+  inject,
+  input,
+  signal,
+  viewChild,
+  viewChildren,
+} from '@angular/core';
 import { FakeChart } from './fake-chart';
 import { StatsService } from './stats.service';
 
@@ -15,48 +27,47 @@ const REGIONS = ['North', 'South', 'East', 'West'];
     <label>Filter regions <input (input)="filter.set($any($event.target).value)" /></label>
     <div class="cards">
       @for (region of visibleRegions(); track region) {
-        <div class="card">{{ region }}<br />{{ summary(region) }}</div>
+        <div class="card" #card [style.height.px]="cardHeight()">
+          {{ region }}<br />{{ summary(region) }}
+        </div>
       }
     </div>
   `,
 })
-export class SalesDashboard implements AfterViewInit {
-  private readonly stats_ = inject(StatsService);
-  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
+export class SalesDashboard {
+  private readonly statsService = inject(StatsService);
   private readonly chartHost = viewChild.required<ElementRef<HTMLElement>>('chart');
+  private readonly cards = viewChildren<ElementRef<HTMLElement>>('card');
+  private chart?: FakeChart;
 
   readonly series = input.required<number[]>();
   protected readonly filter = signal('');
-  private chart?: FakeChart;
+  protected readonly cardHeight = signal<number | null>(null);
 
-  constructor() {
-    effect(() => {
-      const data = this.series();
-      this.chart = new FakeChart();
-      this.chart.init(this.chartHost().nativeElement);
-      this.chart.update(data);
-    });
-  }
-
-  ngAfterViewInit() {
-    const cards = [...this.host.nativeElement.querySelectorAll<HTMLElement>('.card')];
-    let tallest = 0;
-    for (const card of cards) {
-      card.style.height = 'auto';
-      tallest = Math.max(tallest, card.offsetHeight);
-    }
-    for (const card of cards) {
-      card.style.height = `${tallest}px`;
-    }
-  }
-
-  protected stats() {
-    return this.stats_.compute(this.series());
-  }
-
-  protected visibleRegions() {
+  protected readonly stats = computed(() => this.statsService.compute(this.series()));
+  protected readonly visibleRegions = computed(() => {
     const term = this.filter().toLowerCase();
     return REGIONS.filter((region) => region.toLowerCase().includes(term));
+  });
+
+  constructor() {
+    afterNextRender({
+      write: () => {
+        this.chart = new FakeChart();
+        this.chart.init(this.chartHost().nativeElement);
+        this.chart.update(this.series());
+      },
+      read: () => {
+        const heights = this.cards().map((card) => card.nativeElement.offsetHeight);
+        this.cardHeight.set(Math.max(0, ...heights));
+      },
+    });
+
+    effect(() => {
+      const data = this.series();
+      this.chart?.update(data);
+    });
+    inject(DestroyRef).onDestroy(() => this.chart?.destroy());
   }
 
   protected summary(region: string) {
