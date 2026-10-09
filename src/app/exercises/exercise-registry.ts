@@ -499,6 +499,14 @@ export const EXERCISES: readonly Exercise[] = [
     loadComponent: () =>
       import('./http-errors/01-catalog-page/catalog-page').then((m) => m.CatalogPage),
   },
+  {
+    topic: 'http-errors',
+    level: 2,
+    slug: '02-orders-client',
+    title: 'Orders client (interceptor order, retries)',
+    loadComponent: () =>
+      import('./http-errors/02-orders-client/orders-demo').then((m) => m.OrdersDemo),
+  },
 ];
 
 export function routesFor(topic: Topic): Routes {
