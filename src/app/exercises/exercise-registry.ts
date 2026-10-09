@@ -476,6 +476,13 @@ export const EXERCISES: readonly Exercise[] = [
     loadComponent: () =>
       import('./di/01-quantity-steppers/steppers-demo').then((m) => m.SteppersDemo),
   },
+  {
+    topic: 'di',
+    level: 2,
+    slug: '02-signup-feature',
+    title: 'Signup feature (tokens, multi, useExisting)',
+    loadComponent: () => import('./di/02-signup-feature/signup-page').then((m) => m.SignupPage),
+  },
 ];
 
 export function routesFor(topic: Topic): Routes {
