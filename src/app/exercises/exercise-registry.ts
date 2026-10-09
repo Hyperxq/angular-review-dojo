@@ -531,6 +531,13 @@ export const EXERCISES: readonly Exercise[] = [
     loadComponent: () =>
       import('./architecture/02-boundaries/boundaries-demo').then((m) => m.BoundariesDemo),
   },
+  {
+    topic: 'architecture',
+    level: 3,
+    slug: '03-shop',
+    title: 'Shop (god service, organised by type)',
+    loadComponent: () => import('./architecture/03-shop/shop-demo').then((m) => m.ShopDemo),
+  },
 ];
 
 export function routesFor(topic: Topic): Routes {
