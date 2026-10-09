@@ -8,6 +8,12 @@ const COLORS: Record<OrderStatus, string> = {
   cancelled: '#d93025',
 };
 
+const LABELS: Record<OrderStatus, string> = {
+  shipped: 'Shipped',
+  processing: 'Processing',
+  cancelled: 'Cancelled',
+};
+
 @Component({
   selector: 'app-orders-list',
   imports: [RouterLink],
@@ -22,11 +28,15 @@ const COLORS: Record<OrderStatus, string> = {
         <option value="cancelled">Cancelled</option>
       </select>
     </label>
+    <p role="status">
+      {{ visible().length }} {{ visible().length === 1 ? 'order' : 'orders' }} shown
+    </p>
     <ul class="orders">
       @for (order of visible(); track order.id) {
         <li>
-          <span class="dot" [style.background]="colors[order.status]"></span>
+          <span class="dot" aria-hidden="true" [style.background]="colors[order.status]"></span>
           <a [routerLink]="[order.id]">Order #{{ order.id }}</a>
+          <span class="status">{{ labels[order.status] }}</span>
         </li>
       }
     </ul>
@@ -43,6 +53,7 @@ const COLORS: Record<OrderStatus, string> = {
 })
 export class OrdersList {
   protected readonly colors = COLORS;
+  protected readonly labels = LABELS;
   protected readonly filter = signal('');
   protected readonly visible = computed(() =>
     ORDERS.filter((order) => !this.filter() || order.status === this.filter()),
