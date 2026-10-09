@@ -426,6 +426,14 @@ export const EXERCISES: readonly Exercise[] = [
     title: 'Product rows (names, roles, focus)',
     loadComponent: () => import('./a11y/01-product-rows/product-rows').then((m) => m.ProductRows),
   },
+  {
+    topic: 'a11y',
+    level: 2,
+    slug: '02-filter-widgets',
+    title: 'Filter widgets (dropdown, dialog, errors)',
+    loadComponent: () =>
+      import('./a11y/02-filter-widgets/filter-widgets-demo').then((m) => m.FilterWidgetsDemo),
+  },
 ];
 
 export function routesFor(topic: Topic): Routes {
