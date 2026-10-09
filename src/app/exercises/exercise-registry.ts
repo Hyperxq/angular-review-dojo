@@ -507,6 +507,14 @@ export const EXERCISES: readonly Exercise[] = [
     loadComponent: () =>
       import('./http-errors/02-orders-client/orders-demo').then((m) => m.OrdersDemo),
   },
+  {
+    topic: 'http-errors',
+    level: 3,
+    slug: '03-token-refresh',
+    title: 'Token refresh (concurrency, logout)',
+    loadComponent: () =>
+      import('./http-errors/03-token-refresh/session-demo').then((m) => m.SessionDemo),
+  },
 ];
 
 export function routesFor(topic: Topic): Routes {
