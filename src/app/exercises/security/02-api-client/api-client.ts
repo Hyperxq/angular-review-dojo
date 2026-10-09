@@ -3,7 +3,7 @@ import {
   HttpInterceptorFn,
   provideHttpClient,
   withInterceptors,
-  withNoXsrfProtection,
+  withXsrfConfiguration,
 } from '@angular/common/http';
 import { InjectionToken, inject } from '@angular/core';
 import { tap } from 'rxjs';
@@ -13,7 +13,7 @@ export const API_BASE_URL = new InjectionToken<string>('API_BASE_URL', { factory
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const token = inject(TokenStore).token();
-  if (!token) {
+  if (!token || !req.url.startsWith(`${inject(API_BASE_URL)}/`)) {
     return next(req);
   }
   return next(
@@ -27,9 +27,7 @@ export const errorLoggingInterceptor: HttpInterceptorFn = (req, next) =>
       error: (error: HttpErrorResponse) =>
         console.error('API request failed', {
           method: req.method,
-          url: req.urlWithParams,
-          headers: Object.fromEntries(req.headers.keys().map((key) => [key, req.headers.get(key)])),
-          body: req.body,
+          path: req.url.split('?')[0],
           status: error.status,
         }),
     }),
@@ -38,6 +36,6 @@ export const errorLoggingInterceptor: HttpInterceptorFn = (req, next) =>
 export function provideApiClient() {
   return provideHttpClient(
     withInterceptors([authInterceptor, errorLoggingInterceptor]),
-    withNoXsrfProtection(),
+    withXsrfConfiguration({ cookieName: 'XSRF-TOKEN', headerName: 'X-XSRF-TOKEN' }),
   );
 }
