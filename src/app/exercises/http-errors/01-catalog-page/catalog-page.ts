@@ -1,8 +1,6 @@
 import { CurrencyPipe } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { rxResource } from '@angular/core/rxjs-interop';
-import { catchError, of } from 'rxjs';
-import { Product } from '../../../core/models';
 import { ProductApi } from '../../../core/product-api';
 
 @Component({
@@ -10,7 +8,12 @@ import { ProductApi } from '../../../core/product-api';
   imports: [CurrencyPipe],
   template: `
     <h2>Catalog</h2>
-    @if (products.isLoading()) {
+    @if (products.error()) {
+      <div role="alert">
+        <p>We could not load the products.</p>
+        <button type="button" (click)="products.reload()">Try again</button>
+      </div>
+    } @else if (products.isLoading()) {
       <p class="loading">Loading…</p>
     } @else {
       <ul class="products">
@@ -27,6 +30,6 @@ export class CatalogPage {
   private readonly api = inject(ProductApi);
 
   protected readonly products = rxResource({
-    stream: () => this.api.list().pipe(catchError(() => of([] as Product[]))),
+    stream: () => this.api.list(),
   });
 }
