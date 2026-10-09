@@ -373,6 +373,14 @@ export const EXERCISES: readonly Exercise[] = [
     loadComponent: () =>
       import('./lifecycle/03-list-widgets/list-widgets').then((m) => m.ListWidgets),
   },
+  {
+    topic: 'security',
+    level: 1,
+    slug: '01-product-reviews',
+    title: 'Product reviews (untrusted content)',
+    loadComponent: () =>
+      import('./security/01-product-reviews/reviews-demo').then((m) => m.ReviewsDemo),
+  },
 ];
 
 export function routesFor(topic: Topic): Routes {
