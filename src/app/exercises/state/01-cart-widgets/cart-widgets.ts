@@ -1,5 +1,5 @@
 import { CurrencyPipe } from '@angular/common';
-import { Component, inject, input, signal } from '@angular/core';
+import { Component, inject, input } from '@angular/core';
 import { SEED_PRODUCTS } from '../../../core/fake-backend';
 import { Product } from '../../../core/models';
 import { CartState } from './cart-state';
@@ -21,11 +21,10 @@ export class ProductTile {
 
 @Component({
   selector: 'app-cart-badge',
-  template: `<span class="badge">Cart ({{ count() }})</span>`,
+  template: `<span class="badge">Cart ({{ cart.count() }})</span>`,
 })
 export class CartBadge {
-  private readonly cart = inject(CartState);
-  protected readonly count = signal(this.cart.items().reduce((n, i) => n + i.quantity, 0));
+  protected readonly cart = inject(CartState);
 }
 
 @Component({
