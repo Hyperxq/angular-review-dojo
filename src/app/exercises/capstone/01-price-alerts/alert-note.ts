@@ -1,16 +1,17 @@
-import { Component, computed, inject, input } from '@angular/core';
-import { DomSanitizer } from '@angular/platform-browser';
+import { Component, computed, input } from '@angular/core';
+
+const ESCAPES: Record<string, string> = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' };
 
 @Component({
   selector: 'app-alert-note',
   template: `<p class="note" [innerHTML]="html()"></p>`,
 })
 export class AlertNote {
-  private readonly sanitizer = inject(DomSanitizer);
-
   readonly note = input.required<string>();
 
   protected readonly html = computed(() =>
-    this.sanitizer.bypassSecurityTrustHtml(this.note().replace(/\*(.+?)\*/g, '<em>$1</em>')),
+    this.note()
+      .replace(/[&<>"]/g, (char) => ESCAPES[char])
+      .replace(/\*(.+?)\*/g, '<em>$1</em>'),
   );
 }

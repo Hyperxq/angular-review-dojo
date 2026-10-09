@@ -1,6 +1,5 @@
 import { HttpClient } from '@angular/common/http';
 import { Service, inject } from '@angular/core';
-import { retry } from 'rxjs';
 import { NewAlert, PriceAlert } from './alert.models';
 
 @Service()
@@ -16,7 +15,7 @@ export class AlertsApi {
   }
 
   create(alert: NewAlert) {
-    return this.http.post<PriceAlert>('/api/alerts', alert).pipe(retry(3));
+    return this.http.post<PriceAlert>('/api/alerts', alert);
   }
 
   remove(id: number) {

@@ -1,7 +1,7 @@
 import { CurrencyPipe, DatePipe } from '@angular/common';
 import { Component, computed, inject, signal } from '@angular/core';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
-import { interval, mergeMap } from 'rxjs';
+import { interval, switchMap } from 'rxjs';
 import { SEED_PRODUCTS } from '../../../core/fake-backend';
 import { PriceAlert } from './alert.models';
 import { AlertForm } from './alert-form';
@@ -12,7 +12,6 @@ import { AlertsStore } from './alerts-store';
 @Component({
   selector: 'app-alerts-page',
   imports: [AlertForm, AlertNote, CurrencyPipe, DatePipe],
-  providers: [AlertsStore],
   template: `
     <label>
       Search
@@ -46,7 +45,7 @@ export class AlertsPage {
   protected readonly query = signal('');
   protected readonly lastCheck = signal(new Date());
   private readonly results = toSignal(
-    toObservable(this.query).pipe(mergeMap((term) => this.api.search(term))),
+    toObservable(this.query).pipe(switchMap((term) => this.api.search(term))),
     { initialValue: [] as PriceAlert[] },
   );
   protected readonly visible = computed(() =>
