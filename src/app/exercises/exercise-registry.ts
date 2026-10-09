@@ -397,6 +397,13 @@ export const EXERCISES: readonly Exercise[] = [
     loadComponent: () =>
       import('./security/03-content-studio/studio-demo').then((m) => m.StudioDemo),
   },
+  {
+    topic: 'ssr',
+    level: 1,
+    slug: '01-preferences',
+    title: 'Preferences panel (browser globals)',
+    loadComponent: () => import('./ssr/01-preferences/preferences').then((m) => m.Preferences),
+  },
 ];
 
 export function routesFor(topic: Topic): Routes {
