@@ -523,6 +523,14 @@ export const EXERCISES: readonly Exercise[] = [
     loadComponent: () =>
       import('./architecture/01-order-summary/order-summary-page').then((m) => m.OrderSummaryPage),
   },
+  {
+    topic: 'architecture',
+    level: 2,
+    slug: '02-boundaries',
+    title: 'Boundaries between features (fitness function)',
+    loadComponent: () =>
+      import('./architecture/02-boundaries/boundaries-demo').then((m) => m.BoundariesDemo),
+  },
 ];
 
 export function routesFor(topic: Topic): Routes {
