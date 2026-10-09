@@ -1,8 +1,8 @@
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
-import { TransferState } from '@angular/core';
+import { APP_ID, TransferState } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { Product } from '../../../core/models';
-import { SERVER_PLATFORM } from '../../../core/server-env';
+import { SERVER_PLATFORM, enterServerMode } from '../../../core/server-env';
 import { provideFeedApp } from './feed-providers';
 import { NewsFeed } from './news-feed';
 
@@ -13,6 +13,8 @@ const PRODUCTS: Product[] = [
 ];
 
 describe('L2 - news feed', () => {
+  let transferScript: HTMLScriptElement | undefined;
+
   beforeEach(() => {
     vi.spyOn(console, 'warn').mockImplementation(() => undefined);
   });
@@ -21,7 +23,7 @@ describe('L2 - news feed', () => {
     vi.useRealTimers();
     vi.restoreAllMocks();
     vi.unstubAllGlobals();
-    document.getElementById('ng-state')?.remove();
+    transferScript?.remove();
   });
 
   async function render(providers: unknown[] = []) {
@@ -39,6 +41,7 @@ describe('L2 - news feed', () => {
 
   async function serverHtml(now: Date, random: number) {
     TestBed.resetTestingModule();
+    enterServerMode();
     vi.useFakeTimers({ toFake: ['Date'] });
     vi.setSystemTime(now);
     vi.spyOn(Math, 'random').mockReturnValue(random);
@@ -62,6 +65,7 @@ describe('L2 - news feed', () => {
     });
 
     it('survives being serialized and parsed again by the browser', async () => {
+      enterServerMode();
       const fixture = await render([SERVER_PLATFORM]);
 
       const html = (fixture.nativeElement as HTMLElement).innerHTML;
@@ -92,20 +96,27 @@ describe('L2 - news feed', () => {
 
   describe('HTTP transfer cache', () => {
     it('does not request again in the browser what the server already fetched', async () => {
-      vi.stubGlobal('ngServerMode', true);
+      enterServerMode();
       TestBed.resetTestingModule();
       await render([SERVER_PLATFORM]);
       const serialized = TestBed.inject(TransferState).toJson();
 
       vi.unstubAllGlobals();
       TestBed.resetTestingModule();
+      TestBed.configureTestingModule({
+        providers: [
+          provideFeedApp(),
+          provideHttpClientTesting(),
+          { provide: APP_ID, useValue: 'dojo' },
+        ],
+      });
       const script = document.createElement('script');
-      script.id = 'ng-state';
+      script.id = 'dojo-state';
       script.type = 'application/json';
       script.textContent = serialized;
       document.body.append(script);
+      transferScript = script;
 
-      TestBed.configureTestingModule({ providers: [provideFeedApp(), provideHttpClientTesting()] });
       const fixture = TestBed.createComponent(NewsFeed);
       fixture.detectChanges();
       await new Promise((resolve) => setTimeout(resolve));
