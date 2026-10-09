@@ -468,6 +468,14 @@ export const EXERCISES: readonly Exercise[] = [
     loadComponent: () =>
       import('./state/03-checkout-stores/checkout-demo').then((m) => m.CheckoutDemo),
   },
+  {
+    topic: 'di',
+    level: 1,
+    slug: '01-quantity-steppers',
+    title: 'Quantity steppers (scope and injection context)',
+    loadComponent: () =>
+      import('./di/01-quantity-steppers/steppers-demo').then((m) => m.SteppersDemo),
+  },
 ];
 
 export function routesFor(topic: Topic): Routes {
