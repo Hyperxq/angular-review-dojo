@@ -444,6 +444,14 @@ export const EXERCISES: readonly Exercise[] = [
     loadChildren: () =>
       import('./a11y/03-order-tracker/orders.routes').then((m) => m.ORDER_ROUTES),
   },
+  {
+    topic: 'state',
+    level: 1,
+    slug: '01-cart-widgets',
+    title: 'Cart widgets (derived and shared state)',
+    loadComponent: () =>
+      import('./state/01-cart-widgets/cart-widgets').then((m) => m.CartWidgetsDemo),
+  },
 ];
 
 export function routesFor(topic: Topic): Routes {
