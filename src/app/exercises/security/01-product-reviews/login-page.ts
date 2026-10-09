@@ -1,5 +1,6 @@
 import { Component, inject, input } from '@angular/core';
 import { HARD_REDIRECT } from './hard-redirect';
+import { safeReturnUrl } from './return-url';
 
 @Component({
   selector: 'app-login-page',
@@ -17,6 +18,6 @@ export class LoginPage {
 
   protected signIn(event: Event) {
     event.preventDefault();
-    this.redirect(this.returnUrl() ?? '/');
+    this.redirect(safeReturnUrl(this.returnUrl()));
   }
 }
