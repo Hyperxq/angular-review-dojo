@@ -1,11 +1,12 @@
 import {
   HttpErrorResponse,
   HttpInterceptorFn,
+  HttpRequest,
   provideHttpClient,
   withInterceptors,
 } from '@angular/common/http';
 import { InjectionToken, Service, inject, signal } from '@angular/core';
-import { catchError, retry, throwError, timer } from 'rxjs';
+import { catchError, defer, retry, throwError, timer } from 'rxjs';
 
 @Service()
 export class Toasts {
@@ -26,9 +27,18 @@ export const RETRY_DELAY = new InjectionToken<number>('RETRY_DELAY', { factory: 
 export const authInterceptor: HttpInterceptorFn = (req, next) =>
   next(req.clone({ setHeaders: { Authorization: `Bearer ${inject(TokenStore).token()}` } }));
 
+const isRetryable = (req: HttpRequest<unknown>, error: HttpErrorResponse) =>
+  (req.method === 'GET' || req.method === 'HEAD') && (error.status === 0 || error.status >= 500);
+
 export const retryInterceptor: HttpInterceptorFn = (req, next) => {
   const delay = inject(RETRY_DELAY);
-  return next(req).pipe(retry({ count: 2, delay: (_error, attempt) => timer(delay * attempt) }));
+  return defer(() => next(req)).pipe(
+    retry({
+      count: 2,
+      delay: (error: HttpErrorResponse, attempt) =>
+        isRetryable(req, error) ? timer(delay * attempt) : throwError(() => error),
+    }),
+  );
 };
 
 export const errorToastInterceptor: HttpInterceptorFn = (req, next) => {
@@ -43,6 +53,6 @@ export const errorToastInterceptor: HttpInterceptorFn = (req, next) => {
 
 export function provideOrdersHttp() {
   return provideHttpClient(
-    withInterceptors([authInterceptor, retryInterceptor, errorToastInterceptor]),
+    withInterceptors([errorToastInterceptor, retryInterceptor, authInterceptor]),
   );
 }
