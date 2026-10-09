@@ -452,6 +452,14 @@ export const EXERCISES: readonly Exercise[] = [
     loadComponent: () =>
       import('./state/01-cart-widgets/cart-widgets').then((m) => m.CartWidgetsDemo),
   },
+  {
+    topic: 'state',
+    level: 2,
+    slug: '02-product-store',
+    title: 'Product store (SignalStore anti-patterns)',
+    loadComponent: () =>
+      import('./state/02-product-store/product-admin').then((m) => m.ProductAdmin),
+  },
 ];
 
 export function routesFor(topic: Topic): Routes {
