@@ -10,20 +10,43 @@ import { Product } from '../../../core/models';
     <input
       class="search"
       type="search"
+      aria-label="Search products"
       placeholder="Search products"
       (input)="query.set($any($event.target).value)"
     />
     <ul class="rows">
       @for (product of visible(); track product.id) {
         <li class="row">
-          <div class="name" (click)="select(product)">
+          <button type="button" class="name" (click)="select(product)">
             {{ product.name }} <span class="price">{{ product.price | currency }}</span>
-          </div>
-          <input class="qty" type="number" min="1" value="1" />
-          <button class="icon" (click)="toggleWishlist(product)">
-            {{ wishlist().has(product.id) ? '♥' : '♡' }}
           </button>
-          <button class="icon" (click)="remove(product)">✕</button>
+          <input
+            class="qty"
+            type="number"
+            min="1"
+            value="1"
+            [attr.aria-label]="'Quantity for ' + product.name"
+          />
+          <button
+            type="button"
+            class="icon"
+            [attr.aria-label]="
+              wishlist().has(product.id)
+                ? 'Remove ' + product.name + ' from wishlist'
+                : 'Add ' + product.name + ' to wishlist'
+            "
+            (click)="toggleWishlist(product)"
+          >
+            <span aria-hidden="true">{{ wishlist().has(product.id) ? '♥' : '♡' }}</span>
+          </button>
+          <button
+            type="button"
+            class="icon"
+            [attr.aria-label]="'Remove ' + product.name"
+            (click)="remove(product)"
+          >
+            <span aria-hidden="true">✕</span>
+          </button>
         </li>
       }
     </ul>
@@ -38,8 +61,12 @@ import { Product } from '../../../core/models';
       align-items: center;
     }
     .name {
+      background: none;
+      border: 0;
       cursor: pointer;
       flex: 1;
+      font: inherit;
+      text-align: left;
     }
     .icon {
       background: none;
@@ -47,9 +74,10 @@ import { Product } from '../../../core/models';
       cursor: pointer;
       font-size: 1.25rem;
     }
-    button:focus,
-    input:focus {
-      outline: none;
+    button:focus-visible,
+    input:focus-visible {
+      outline: 2px solid #1a56db;
+      outline-offset: 2px;
     }
   `,
 })
