@@ -9,16 +9,20 @@ import { Component, signal } from '@angular/core';
         id="email"
         type="email"
         [value]="email()"
+        [attr.aria-invalid]="error() ? 'true' : null"
+        [attr.aria-describedby]="error() ? 'email-error' : null"
         (input)="email.set($any($event.target).value)"
       />
       @if (error()) {
-        <div class="error">{{ error() }}</div>
+        <p id="email-error" class="error" role="alert">{{ error() }}</p>
       }
       <button type="submit">Subscribe</button>
     </form>
-    @if (done()) {
-      <p class="done">Thanks, check your inbox to confirm.</p>
-    }
+    <div role="status">
+      @if (done()) {
+        <p class="done">Thanks, check your inbox to confirm.</p>
+      }
+    </div>
   `,
 })
 export class NewsletterForm {
