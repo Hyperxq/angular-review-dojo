@@ -76,3 +76,28 @@ Topics: RxJS (deep: L1–L8), RxJS to Signals, Routing (L1–L5), Performance (L
 - README `ac22f73`.
 - Final `npm test -- --watch=false`: main 254 tests, 152 failed / 102 passed (47 files; only exercise specs fail, the 4 base files pass; 1 expected unhandled rejection from the Lifecycle L3 `async ngOnInit`); solutions 263 passed / 0 failed (47 files). `solutions` has 9 more tests than `main` because the Testing exercises replace weak specs with stronger ones.
 - Findings: `paramsInheritanceStrategy` defaults to `'always'` in 22 (the "child cannot see parent params" bug no longer exists); missing `pathMatch` on an empty-path redirect throws NG04014 (not silent); NG0100 only surfaces for `Eager` views (OnPush dirty-only check makes it a silent stale view); `resource.value()` throws in the error state; `vi.mock` of relative imports is unsupported in the Angular unit-test builder; `getDeferBlocks()` is async.
+
+## Part 2 — Staff level
+
+Objective: prepare for a STAFF-level review challenge. Part 1 covered framework mechanics; Part 2 covers security, SSR, a11y, state at scale, DI architecture, HTTP/error architecture, feature architecture and prioritising review comments (severity: blocking / should-fix / nit).
+
+### Part 2 conventions
+- Same exercise layout as Part 1. On `solutions`, `SOLUTION.md` also lists a severity per finding and the tradeoff discussion.
+- Registry marks topics with a part (`TOPIC_PART`); the index groups topics under "Part 1" / "Part 2".
+- Dependency decision: `@ngrx/signals` 22.0.1 (peer `@angular/core ^22.0.0`, `rxjs ^6.5.3 || ^7.4.0`) is supported, so the state track uses real SignalStore. `@angular/ssr` / `@angular/platform-server` are NOT added: SSR exercises use `PLATFORM_ID: 'server'` plus stubbed browser globals.
+- Spec helpers: `src/app/core/a11y-queries.ts` (role/name queries, no Testing Library), `src/app/core/server-env.ts` (server simulation).
+- Route for every task below: delegated (single writer).
+
+### Part 2 tasks
+- [ ] T11 — Security (`security`) L1–L3.
+- [ ] T12 — SSR and hydration (`ssr`) L1–L3.
+- [ ] T13 — Accessibility (`a11y`) L1–L3.
+- [ ] T14 — State at scale (`state`, SignalStore) L1–L3.
+- [ ] T15 — DI architecture (`di`) L1–L3.
+- [ ] T16 — HTTP and error architecture (`http-errors`) L1–L3.
+- [ ] T17 — Feature architecture (`architecture`) L1–L3 (L2 import-boundary fitness spec).
+- [ ] T18 — Capstone: PR review simulation (`capstone`) with `PR.md`, code, blocking-only specs, `REVIEW.md` on `solutions`.
+- [ ] T19 — Docs: root README (Part 2 section, levels map, study order, staff review rubric).
+
+### Part 2 evidence
+(filled per task: main commit -> solutions fix commit, red/total on `main`)
