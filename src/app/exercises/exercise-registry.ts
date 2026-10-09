@@ -411,6 +411,14 @@ export const EXERCISES: readonly Exercise[] = [
     title: 'News feed (hydration mismatches)',
     loadComponent: () => import('./ssr/02-news-feed/news-feed').then((m) => m.NewsFeed),
   },
+  {
+    topic: 'ssr',
+    level: 3,
+    slug: '03-article-page',
+    title: 'Article page (incremental hydration)',
+    loadComponent: () =>
+      import('./ssr/03-article-page/article-page').then((m) => m.ArticlePage),
+  },
 ];
 
 export function routesFor(topic: Topic): Routes {
