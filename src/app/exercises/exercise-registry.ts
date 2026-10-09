@@ -419,6 +419,13 @@ export const EXERCISES: readonly Exercise[] = [
     loadComponent: () =>
       import('./ssr/03-article-page/article-page').then((m) => m.ArticlePage),
   },
+  {
+    topic: 'a11y',
+    level: 1,
+    slug: '01-product-rows',
+    title: 'Product rows (names, roles, focus)',
+    loadComponent: () => import('./a11y/01-product-rows/product-rows').then((m) => m.ProductRows),
+  },
 ];
 
 export function routesFor(topic: Topic): Routes {

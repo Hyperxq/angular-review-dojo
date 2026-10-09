@@ -5,9 +5,10 @@ const IMPLICIT_ROLES: readonly [selector: string, role: string][] = [
   ['input[type=radio]', 'radio'],
   ['input[type=number]', 'spinbutton'],
   [
-    'input:not([type]), input[type=text], input[type=search], input[type=email], input[type=password], input[type=tel], input[type=url], textarea',
+    'input:not([type]), input[type=text], input[type=email], input[type=password], input[type=tel], input[type=url], textarea',
     'textbox',
   ],
+  ['input[type=search]', 'searchbox'],
   ['select', 'combobox'],
   ['h1, h2, h3, h4, h5, h6', 'heading'],
   ['ul, ol', 'list'],
