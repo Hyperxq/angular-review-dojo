@@ -483,6 +483,14 @@ export const EXERCISES: readonly Exercise[] = [
     title: 'Signup feature (tokens, multi, useExisting)',
     loadComponent: () => import('./di/02-signup-feature/signup-page').then((m) => m.SignupPage),
   },
+  {
+    topic: 'di',
+    level: 3,
+    slug: '03-reports-area',
+    title: 'Reports area (route providers, duplicate singletons)',
+    loadComponent: () => import('./di/03-reports-area/reports-shell').then((m) => m.ReportsShell),
+    loadChildren: () => import('./di/03-reports-area/reports.routes').then((m) => m.REPORTS_ROUTES),
+  },
 ];
 
 export function routesFor(topic: Topic): Routes {
