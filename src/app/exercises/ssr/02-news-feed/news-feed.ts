@@ -1,6 +1,6 @@
 import { CurrencyPipe, DatePipe } from '@angular/common';
 import { httpResource } from '@angular/common/http';
-import { Component, computed } from '@angular/core';
+import { Component, afterNextRender, computed, signal } from '@angular/core';
 import { Product } from '../../../core/models';
 import { PromoBanner } from './promo-banner';
 
@@ -9,19 +9,23 @@ import { PromoBanner } from './promo-banner';
   imports: [DatePipe, CurrencyPipe, PromoBanner],
   template: `
     <h2>Today's deals</h2>
-    <p class="stamp">Updated {{ now | date: 'mediumTime' }}</p>
+    @if (now(); as time) {
+      <p class="stamp">Updated {{ time | date: 'mediumTime' }}</p>
+    }
     @if (featured(); as deal) {
       <p class="featured">
         Featured: <strong>{{ deal.name }}</strong>
       </p>
     }
     <table class="deals">
-      @for (deal of deals(); track deal.id) {
-        <tr>
-          <td>{{ deal.name }}</td>
-          <td>{{ deal.price | currency }}</td>
-        </tr>
-      }
+      <tbody>
+        @for (deal of deals(); track deal.id) {
+          <tr>
+            <td>{{ deal.name }}</td>
+            <td>{{ deal.price | currency }}</td>
+          </tr>
+        }
+      </tbody>
     </table>
     <app-promo-banner />
   `,
@@ -29,12 +33,17 @@ import { PromoBanner } from './promo-banner';
 export class NewsFeed {
   private readonly products = httpResource<Product[]>(() => '/api/products');
 
-  protected readonly now = new Date();
+  protected readonly now = signal<Date | null>(null);
+  private readonly featuredIndex = signal(0);
   protected readonly deals = computed(() =>
     this.products.hasValue() ? this.products.value() : [],
   );
-  protected readonly featured = computed(() => {
-    const deals = this.deals();
-    return deals[Math.floor(Math.random() * deals.length)];
-  });
+  protected readonly featured = computed(() => this.deals()[this.featuredIndex()]);
+
+  constructor() {
+    afterNextRender(() => {
+      this.now.set(new Date());
+      this.featuredIndex.set(Math.floor(Math.random() * Math.max(this.deals().length, 1)));
+    });
+  }
 }
