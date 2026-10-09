@@ -23,7 +23,7 @@ describe('L1 - product rows', () => {
   it('lets the keyboard select a product: the name is a button', async () => {
     const { fixture, root } = await render();
 
-    getByRole(root, 'button', { name: /Keychron K2 Keyboard/ }).click();
+    getByRole(root, 'button', { name: /^Keychron K2 Keyboard/ }).click();
     await fixture.whenStable();
 
     expect(root.querySelector('.selected')?.textContent).toContain('Keychron K2 Keyboard');
