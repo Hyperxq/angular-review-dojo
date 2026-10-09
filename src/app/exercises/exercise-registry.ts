@@ -389,6 +389,14 @@ export const EXERCISES: readonly Exercise[] = [
     loadComponent: () =>
       import('./security/02-api-client/api-client-demo').then((m) => m.ApiClientDemo),
   },
+  {
+    topic: 'security',
+    level: 3,
+    slug: '03-content-studio',
+    title: 'Content studio (markdown, files, sanitizer)',
+    loadComponent: () =>
+      import('./security/03-content-studio/studio-demo').then((m) => m.StudioDemo),
+  },
 ];
 
 export function routesFor(topic: Topic): Routes {
