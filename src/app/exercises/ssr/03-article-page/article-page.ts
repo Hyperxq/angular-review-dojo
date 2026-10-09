@@ -10,7 +10,7 @@ import { ReactionBar } from './reaction-bar';
       <h2>Why we moved the cart to signals</h2>
       <p>A short story about derived state, and the bug that made us do it.</p>
 
-      @defer (hydrate never) {
+      @defer (hydrate on interaction) {
         <app-reaction-bar [initial]="12" />
       }
 

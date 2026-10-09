@@ -14,8 +14,8 @@
 Server rendering runs the component class in Node: there is no `window`, `localStorage` or `matchMedia`; the DOM it
 renders into is a server DOM provided through the `DOCUMENT` token. Constructors and field initializers run on both
 platforms, so they must be platform-neutral. Code that needs the browser belongs in a hook that only runs there:
-`afterNextRender` / `afterEveryRender` are skipped during server rendering (verified: with `PLATFORM_ID = 'server'` the
-callback never runs). Event handlers only fire in the browser, so touching globals there is safe.
+`afterNextRender` / `afterEveryRender` are skipped during server rendering (verified in the source: they return a no-op
+when the `ngServerMode` global is true; `PLATFORM_ID` alone does not stop them). Event handlers only fire in the browser, so touching globals there is safe.
 
 ## The fix
 
