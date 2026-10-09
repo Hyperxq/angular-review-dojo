@@ -515,6 +515,14 @@ export const EXERCISES: readonly Exercise[] = [
     loadComponent: () =>
       import('./http-errors/03-token-refresh/session-demo').then((m) => m.SessionDemo),
   },
+  {
+    topic: 'architecture',
+    level: 1,
+    slug: '01-order-summary',
+    title: 'Order summary (smart and dumb components)',
+    loadComponent: () =>
+      import('./architecture/01-order-summary/order-summary-page').then((m) => m.OrderSummaryPage),
+  },
 ];
 
 export function routesFor(topic: Topic): Routes {
