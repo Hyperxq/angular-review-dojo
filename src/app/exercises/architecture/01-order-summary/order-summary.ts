@@ -1,8 +1,6 @@
 import { CurrencyPipe } from '@angular/common';
-import { Component, computed, inject, input, output } from '@angular/core';
-import { toSignal } from '@angular/core/rxjs-interop';
-import { ProductApi } from '../../../core/product-api';
-import { PricedLine } from './order-pricing';
+import { Component, computed, input, output } from '@angular/core';
+import { PricedLine, priceOrder } from './order-pricing';
 
 @Component({
   selector: 'app-order-summary',
@@ -21,24 +19,18 @@ import { PricedLine } from './order-pricing';
         </tr>
       }
     </table>
-    <p class="subtotal">Subtotal {{ subtotal() | currency }}</p>
-    @if (subtotal() > 500) {
-      <p class="discount">Volume discount -{{ subtotal() * 0.1 | currency }}</p>
+    <p class="subtotal">Subtotal {{ totals().subtotal | currency }}</p>
+    @if (totals().discount) {
+      <p class="discount">Volume discount -{{ totals().discount | currency }}</p>
     }
-    <p class="total">
-      Total {{ (subtotal() > 500 ? subtotal() * 0.9 : subtotal()) * 1.21 | currency }}
-    </p>
+    <p class="total">Total {{ totals().total | currency }}</p>
     <button type="button" (click)="confirm.emit()">Confirm order</button>
   `,
 })
 export class OrderSummary {
   readonly lines = input.required<PricedLine[]>();
+  readonly stock = input<Record<number, number>>({});
   readonly confirm = output<void>();
 
-  protected readonly stock = toSignal(inject(ProductApi).stock(), {
-    initialValue: {} as Record<number, number>,
-  });
-  protected readonly subtotal = computed(() =>
-    this.lines().reduce((sum, line) => sum + line.unitPrice * line.quantity, 0),
-  );
+  protected readonly totals = computed(() => priceOrder(this.lines()));
 }

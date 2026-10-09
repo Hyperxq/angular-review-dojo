@@ -11,7 +11,11 @@ import { OrderSummary } from './order-summary';
   template: `
     <h2>Review your order</h2>
     @if (lines().length) {
-      <app-order-summary [lines]="lines()" (confirm)="confirmed.set(true)" />
+      <app-order-summary
+        [lines]="lines()"
+        [stock]="stock.hasValue() ? stock.value() : {}"
+        (confirm)="confirmed.set(true)"
+      />
     }
     @if (confirmed()) {
       <p class="done">Order confirmed.</p>
@@ -27,6 +31,7 @@ export class OrderSummaryPage {
 
   protected readonly confirmed = signal(false);
   private readonly products = rxResource({ stream: () => this.api.list() });
+  protected readonly stock = rxResource({ stream: () => this.api.stock() });
   protected readonly lines = computed<PricedLine[]>(() => {
     const products = this.products.hasValue() ? this.products.value() : [];
     return this.order.flatMap((line) => {
