@@ -89,15 +89,29 @@ Objective: prepare for a STAFF-level review challenge. Part 1 covered framework 
 - Route for every task below: delegated (single writer).
 
 ### Part 2 tasks
-- [ ] T11 — Security (`security`) L1–L3.
-- [ ] T12 — SSR and hydration (`ssr`) L1–L3.
-- [ ] T13 — Accessibility (`a11y`) L1–L3.
-- [ ] T14 — State at scale (`state`, SignalStore) L1–L3.
-- [ ] T15 — DI architecture (`di`) L1–L3.
-- [ ] T16 — HTTP and error architecture (`http-errors`) L1–L3.
-- [ ] T17 — Feature architecture (`architecture`) L1–L3 (L2 import-boundary fitness spec).
-- [ ] T18 — Capstone: PR review simulation (`capstone`) with `PR.md`, code, blocking-only specs, `REVIEW.md` on `solutions`.
-- [ ] T19 — Docs: root README (Part 2 section, levels map, study order, staff review rubric).
+- [x] T11 — Security (`security`) L1–L3.
+- [x] T12 — SSR and hydration (`ssr`) L1–L3.
+- [x] T13 — Accessibility (`a11y`) L1–L3.
+- [x] T14 — State at scale (`state`, SignalStore) L1–L3.
+- [x] T15 — DI architecture (`di`) L1–L3.
+- [x] T16 — HTTP and error architecture (`http-errors`) L1–L3.
+- [x] T17 — Feature architecture (`architecture`) L1–L3 (L2 import-boundary fitness spec).
+- [x] T18 — Capstone: PR review simulation (`capstone`) with `PR.md`, code, blocking-only specs, `REVIEW.md` on `solutions`.
+- [x] T19 — Docs: root README (Part 2 section, levels map, study order, staff review rubric).
 
 ### Part 2 evidence
-(filled per task: main commit -> solutions fix commit, red/total on `main`)
+(main commit -> solutions fix commit, red/total tests on `main` for the exercise spec)
+
+- Setup: plan `1f3aad4`, `@ngrx/signals` `496aa54`, registry `part` grouping `25c0b2d`, role/name query + server-env helpers `8cd9eb3`, node fs types `6a490f1`, import scanner `a4d3d32`.
+- T11 Security: L1 `11e9068`/`0eeb100` (6/11), L2 `8c3d6f4`/`d790853` (4/7), L3 `d9530ec`/`e158c97` (5/8).
+- T12 SSR: L1 `340f17d`/`9519441` (2/5), L2 `3f146a7`+`9b3ad68`/`c3eb672` (4/6), L3 `a92461d`/`ae9ecfd` (3/5).
+- T13 a11y: L1 `8e303a3`+`f46c3dc`/`6d4788e` (6/7), L2 `e5ab413`/`6d6839f` (13/16), L3 `804838f`+`1240f04`/`54285c0` (6/8).
+- T14 State: L1 `6df56b4`/`7f7b4ed` (4/5), L2 `342090b`/`14e2e19` (6/8), L3 `ba5ec0e`/`a520c13` (5/7).
+- T15 DI: L1 `9faafa5`/`c59693a` (2/4; one expected unhandled NG0203), L2 `5993ad2`/`ed5a398` (6/6, all fail until both `multi` and the token default are fixed), L3 `6c1365c`/`83ae0e6` (3/4).
+- T16 HTTP and errors: L1 `1ab4def`/`d96ff43` (3/6), L2 `fe19485`/`a2712e5` (5/6), L3 `af7a46b`/`7dd91bd` (6/9).
+- T17 Architecture: L1 `9b49fd3`/`96bb21f` (2/6), L2 `45f7273`/`cb1296b` (3/4 fitness rules), L3 `714f442`/`57503a3` (4/10; the 5 behaviour tests are guards that pass on both branches).
+- T18 Capstone: `1b176b8`+`736250a`/`2dd3f96` (4/5; blocking issues only), `REVIEW.md` on `solutions`.
+- T19 README: `99b8eda` (Part 2 map, staff review rubric, 7-day study order, 19 to 22 additions).
+- Final `npm test -- --watch=false`: main 412 tests, 254 failed / 158 passed (70 files; only exercise specs fail; 3 expected unhandled errors: Lifecycle L3, DI L1 NG0203, DI L2); solutions 421 passed / 0 failed (70 files).
+- API facts verified in 22.2.2 / `@ngrx/signals` 22.0.1: `afterNextRender` and the HTTP transfer cache key off the `ngServerMode` global, not `PLATFORM_ID`; TestBed `APP_ID` is `a`, so `TransferState` reads `<script id="a-state">`; `provideClientHydration()` enables transfer cache and incremental hydration by default (`withIncrementalHydration()` deprecated) and incremental hydration includes event replay; transfer cache skips requests with auth headers/cookies/credentials by default; `retry` re-subscribes without re-running downstream interceptor functions (use `defer(() => next(req))`); `provideHttpClient` in a route is an independent client (`withRequestsMadeViaParent()` links it); `HttpClient` is injectable without `provideHttpClient` (root-provided), so "no provider" cannot be tested, assert "no request made" instead; `patchState` compares slices by reference (no freezing in 22.0.1); `@Service` decorator (`autoProvided`, `factory`) and `ng g service` emitting `@Service()`; XSRF interceptor only acts on same-origin non-GET requests; `RouterTestingHarness.navigateByUrl('/')` returned `null` for a nested empty-path route pair in the capstone (used a host component instead).
+- Untestable or only partly testable defects: SSR hydration success and NG05xx errors (no real server renderer), DOM edits in `ngOnInit` (SSR L2), `hydrate on interaction` replay (SSR L3, covered by a source scan only), screen-reader output and contrast (a11y), token storage in `localStorage` (Security L2), where business rules should live (State L2, Architecture L1), multi-tab refresh (HTTP L3), decomposition quality (Architecture L3, ADR only), everything non-blocking in the capstone.
