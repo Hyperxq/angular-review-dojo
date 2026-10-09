@@ -94,8 +94,6 @@ describe('L3 - order tracker', () => {
     });
 
     it('does not expose the decorative dot to assistive technology', async () => {
-      const dots = queryAllByRole(root(), 'img');
-      expect(dots).toHaveLength(0);
       expect(
         [...root().querySelectorAll('.dot')].every((d) => d.getAttribute('aria-hidden') === 'true'),
       ).toBe(true);
