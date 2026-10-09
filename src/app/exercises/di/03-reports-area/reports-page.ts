@@ -13,7 +13,6 @@ const REPORTS = [
 
 @Component({
   selector: 'app-reports-page',
-  providers: [Selection],
   template: `
     <ul class="reports">
       @for (report of reports; track report.id) {
