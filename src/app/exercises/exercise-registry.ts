@@ -491,6 +491,14 @@ export const EXERCISES: readonly Exercise[] = [
     loadComponent: () => import('./di/03-reports-area/reports-shell').then((m) => m.ReportsShell),
     loadChildren: () => import('./di/03-reports-area/reports.routes').then((m) => m.REPORTS_ROUTES),
   },
+  {
+    topic: 'http-errors',
+    level: 1,
+    slug: '01-catalog-page',
+    title: 'Catalog page (swallowed errors)',
+    loadComponent: () =>
+      import('./http-errors/01-catalog-page/catalog-page').then((m) => m.CatalogPage),
+  },
 ];
 
 export function routesFor(topic: Topic): Routes {
