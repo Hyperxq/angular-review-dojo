@@ -1,4 +1,4 @@
-import { EXERCISES, TOPICS } from './exercise-registry';
+import { EXERCISES, TOPICS, TOPIC_PART } from './exercise-registry';
 
 describe('exercise registry', () => {
   it('has unique topic/slug pairs', () => {
@@ -18,5 +18,9 @@ describe('exercise registry', () => {
     for (const e of EXERCISES) {
       expect(typeof (await e.loadComponent())).toBe('function');
     }
+  });
+
+  it('assigns every topic to Part 1 or Part 2', () => {
+    expect(Object.keys(TOPIC_PART).sort()).toEqual(Object.keys(TOPICS).sort());
   });
 });

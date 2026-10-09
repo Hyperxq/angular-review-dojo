@@ -50,5 +50,37 @@ export const routes: Routes = [
     loadChildren: () =>
       import('./exercises/lifecycle/lifecycle.routes').then((m) => m.LIFECYCLE_ROUTES),
   },
+  {
+    path: 'security',
+    loadChildren: () => import('./exercises/security/security.routes').then((m) => m.SECURITY_ROUTES),
+  },
+  {
+    path: 'ssr',
+    loadChildren: () => import('./exercises/ssr/ssr.routes').then((m) => m.SSR_ROUTES),
+  },
+  {
+    path: 'a11y',
+    loadChildren: () => import('./exercises/a11y/a11y.routes').then((m) => m.A11Y_ROUTES),
+  },
+  {
+    path: 'state',
+    loadChildren: () => import('./exercises/state/state.routes').then((m) => m.STATE_ROUTES),
+  },
+  {
+    path: 'di',
+    loadChildren: () => import('./exercises/di/di.routes').then((m) => m.DI_ROUTES),
+  },
+  {
+    path: 'http-errors',
+    loadChildren: () => import('./exercises/http-errors/http-errors.routes').then((m) => m.HTTP_ERRORS_ROUTES),
+  },
+  {
+    path: 'architecture',
+    loadChildren: () => import('./exercises/architecture/architecture.routes').then((m) => m.ARCHITECTURE_ROUTES),
+  },
+  {
+    path: 'capstone',
+    loadChildren: () => import('./exercises/capstone/capstone.routes').then((m) => m.CAPSTONE_ROUTES),
+  },
   { path: '**', redirectTo: '' },
 ];

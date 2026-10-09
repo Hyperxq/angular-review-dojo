@@ -12,9 +12,39 @@ export const TOPICS = {
   'change-detection': 'Change detection',
   memory: 'Memory and profiling',
   lifecycle: 'Lifecycle',
+  security: 'Security',
+  ssr: 'SSR and hydration',
+  a11y: 'Accessibility',
+  state: 'State at scale',
+  di: 'DI architecture',
+  'http-errors': 'HTTP and error architecture',
+  architecture: 'Feature architecture',
+  capstone: 'Capstone: PR review',
 } as const;
 
 export type Topic = keyof typeof TOPICS;
+
+/** Part 1 is framework mechanics; Part 2 is staff-level review. */
+export const TOPIC_PART: Record<Topic, 1 | 2> = {
+  rxjs: 1,
+  'rxjs-to-signals': 1,
+  routing: 1,
+  performance: 1,
+  forms: 1,
+  directives: 1,
+  testing: 1,
+  'change-detection': 1,
+  memory: 1,
+  lifecycle: 1,
+  security: 2,
+  ssr: 2,
+  a11y: 2,
+  state: 2,
+  di: 2,
+  'http-errors': 2,
+  architecture: 2,
+  capstone: 2,
+};
 
 export interface Exercise {
   topic: Topic;
