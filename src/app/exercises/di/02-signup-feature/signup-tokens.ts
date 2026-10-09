@@ -15,7 +15,9 @@ export class BufferLogger {
   }
 }
 
-export const SIGNUP_CONFIG = new InjectionToken<SignupConfig>('SIGNUP_CONFIG');
+export const SIGNUP_CONFIG = new InjectionToken<SignupConfig>('SIGNUP_CONFIG', {
+  factory: () => ({ maxLength: 12 }),
+});
 export const USERNAME_VALIDATORS = new InjectionToken<UsernameValidator[]>('USERNAME_VALIDATORS');
 export const LOGGER = new InjectionToken<BufferLogger>('LOGGER');
 export const AUDIT_LOG = new InjectionToken<BufferLogger>('AUDIT_LOG');

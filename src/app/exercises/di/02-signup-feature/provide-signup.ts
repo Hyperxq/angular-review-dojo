@@ -20,10 +20,14 @@ const maxLength =
 
 export function provideSignup(): Provider[] {
   return [
-    { provide: USERNAME_VALIDATORS, useValue: required },
-    { provide: USERNAME_VALIDATORS, useValue: minLength(3) },
-    { provide: USERNAME_VALIDATORS, useFactory: () => maxLength(inject(SIGNUP_CONFIG).maxLength) },
+    { provide: USERNAME_VALIDATORS, useValue: required, multi: true },
+    { provide: USERNAME_VALIDATORS, useValue: minLength(3), multi: true },
+    {
+      provide: USERNAME_VALIDATORS,
+      useFactory: () => maxLength(inject(SIGNUP_CONFIG).maxLength),
+      multi: true,
+    },
     { provide: LOGGER, useClass: BufferLogger },
-    { provide: AUDIT_LOG, useClass: BufferLogger },
+    { provide: AUDIT_LOG, useExisting: LOGGER },
   ];
 }
