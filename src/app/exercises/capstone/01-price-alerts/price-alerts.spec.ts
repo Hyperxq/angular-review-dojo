@@ -96,9 +96,11 @@ describe('Capstone - price alerts (blocking issues only)', () => {
       await type('ke');
 
       byTerm('ke').forEach((r) => r.flush([alert(2, 'Keychron K2 Keyboard')]));
-      byTerm('k').forEach((r) =>
-        r.flush([alert(1, 'Keychron K2 Keyboard'), alert(3, 'Kensington Trackball')]),
-      );
+      byTerm('k')
+        .filter((r) => !r.cancelled)
+        .forEach((r) =>
+          r.flush([alert(1, 'Keychron K2 Keyboard'), alert(3, 'Kensington Trackball')]),
+        );
       await tick();
       fixture.detectChanges();
 
