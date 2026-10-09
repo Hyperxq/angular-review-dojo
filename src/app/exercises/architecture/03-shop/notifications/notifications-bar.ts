@@ -1,19 +1,19 @@
 import { Component, inject } from '@angular/core';
-import { ShopService } from '../services/shop.service';
+import { NotificationsStore } from './notifications-store';
 
 @Component({
   selector: 'app-notifications-bar',
   template: `
     <ul class="notifications" role="status">
-      @for (n of shop.notifications(); track n.id) {
+      @for (n of store.items(); track n.id) {
         <li>
           {{ n.message }}
-          <button type="button" (click)="shop.dismiss(n.id)">Dismiss</button>
+          <button type="button" (click)="store.dismiss(n.id)">Dismiss</button>
         </li>
       }
     </ul>
   `,
 })
 export class NotificationsBar {
-  protected readonly shop = inject(ShopService);
+  protected readonly store = inject(NotificationsStore);
 }

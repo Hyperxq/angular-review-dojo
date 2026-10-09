@@ -1,29 +1,30 @@
 import { Component, inject } from '@angular/core';
-import { CartPanel } from './components/cart-panel';
-import { NotificationsBar } from './components/notifications-bar';
-import { ProductCard } from './components/product-card';
-import { WishlistPanel } from './components/wishlist-panel';
-import { ShopService } from './services/shop.service';
+import { CartPanel } from './cart';
+import { CatalogStore, ProductCard } from './catalog';
+import { NotificationsBar } from './notifications';
+import { OrdersPanel } from './orders';
+import { WishlistPanel } from './wishlist';
 
 @Component({
   selector: 'app-shop-demo',
-  imports: [ProductCard, CartPanel, WishlistPanel, NotificationsBar],
+  imports: [ProductCard, CartPanel, OrdersPanel, WishlistPanel, NotificationsBar],
   template: `
     <app-notifications-bar />
     <input
       type="search"
       aria-label="Search products"
-      (input)="shop.setQuery($any($event.target).value)"
+      (input)="catalog.query.set($any($event.target).value)"
     />
     <ul class="products">
-      @for (product of shop.visibleProducts(); track product.id) {
+      @for (product of catalog.visible(); track product.id) {
         <li><app-product-card [product]="product" /></li>
       }
     </ul>
     <app-cart-panel />
+    <app-orders-panel />
     <app-wishlist-panel />
   `,
 })
 export class ShopDemo {
-  protected readonly shop = inject(ShopService);
+  protected readonly catalog = inject(CatalogStore);
 }
