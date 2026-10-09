@@ -4,6 +4,7 @@ import { StepperState } from './stepper-state';
 
 @Component({
   selector: 'app-quantity-stepper',
+  providers: [StepperState],
   template: `
     <span class="label">{{ label() }}</span>
     <button type="button" class="dec" (click)="state.decrement()">-</button>
@@ -13,12 +14,13 @@ import { StepperState } from './stepper-state';
   `,
 })
 export class QuantityStepper {
+  private readonly analytics = inject(Analytics);
   protected readonly state = inject(StepperState);
 
   readonly label = input.required<string>();
 
   protected reset() {
-    inject(Analytics).track(`stepper-reset:${this.label()}`);
     this.state.reset();
+    this.analytics.track(`stepper-reset:${this.label()}`);
   }
 }

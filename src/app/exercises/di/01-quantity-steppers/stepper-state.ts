@@ -1,6 +1,6 @@
 import { Service, signal } from '@angular/core';
 
-@Service()
+@Service({ autoProvided: false })
 export class StepperState {
   readonly count = signal(1);
 
