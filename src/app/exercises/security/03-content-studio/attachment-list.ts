@@ -1,5 +1,4 @@
-import { Component, inject, input } from '@angular/core';
-import { DomSanitizer } from '@angular/platform-browser';
+import { Component, input } from '@angular/core';
 
 @Component({
   selector: 'app-attachment-list',
@@ -14,11 +13,9 @@ import { DomSanitizer } from '@angular/platform-browser';
   `,
 })
 export class AttachmentList {
-  private readonly sanitizer = inject(DomSanitizer);
-
   readonly files = input.required<string[]>();
 
   protected downloadUrl(file: string) {
-    return this.sanitizer.bypassSecurityTrustUrl(`/api/files/${file}/download`);
+    return `/api/files/${encodeURIComponent(file)}/download`;
   }
 }

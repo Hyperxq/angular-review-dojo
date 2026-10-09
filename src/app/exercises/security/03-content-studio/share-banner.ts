@@ -1,19 +1,14 @@
-import { Component, computed, inject, input } from '@angular/core';
-import { DomSanitizer } from '@angular/platform-browser';
+import { Component, input } from '@angular/core';
 
 @Component({
   selector: 'app-share-banner',
-  template: `<p class="banner" [innerHTML]="message()"></p>`,
+  template: `
+    <p class="banner">
+      <strong>{{ sharedBy() }}</strong> shared <em>{{ fileName() }}</em> with you
+    </p>
+  `,
 })
 export class ShareBanner {
-  private readonly sanitizer = inject(DomSanitizer);
-
   readonly sharedBy = input.required<string>();
   readonly fileName = input.required<string>();
-
-  protected readonly message = computed(() =>
-    this.sanitizer.bypassSecurityTrustHtml(
-      `<strong>${this.sharedBy()}</strong> shared <em>${this.fileName()}</em> with you`,
-    ),
-  );
 }
