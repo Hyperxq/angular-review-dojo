@@ -434,6 +434,16 @@ export const EXERCISES: readonly Exercise[] = [
     loadComponent: () =>
       import('./a11y/02-filter-widgets/filter-widgets-demo').then((m) => m.FilterWidgetsDemo),
   },
+  {
+    topic: 'a11y',
+    level: 3,
+    slug: '03-order-tracker',
+    title: 'Order tracker (route focus, live regions, colour)',
+    loadComponent: () =>
+      import('./a11y/03-order-tracker/orders-shell').then((m) => m.OrdersShell),
+    loadChildren: () =>
+      import('./a11y/03-order-tracker/orders.routes').then((m) => m.ORDER_ROUTES),
+  },
 ];
 
 export function routesFor(topic: Topic): Routes {
