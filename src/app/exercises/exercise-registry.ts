@@ -538,6 +538,16 @@ export const EXERCISES: readonly Exercise[] = [
     title: 'Shop (god service, organised by type)',
     loadComponent: () => import('./architecture/03-shop/shop-demo').then((m) => m.ShopDemo),
   },
+  {
+    topic: 'capstone',
+    level: 1,
+    slug: '01-price-alerts',
+    title: 'PR #482: price alerts (read PR.md)',
+    loadComponent: () =>
+      import('./capstone/01-price-alerts/alerts-shell').then((m) => m.AlertsShell),
+    loadChildren: () =>
+      import('./capstone/01-price-alerts/alerts.routes').then((m) => m.ALERT_ROUTES),
+  },
 ];
 
 export function routesFor(topic: Topic): Routes {
