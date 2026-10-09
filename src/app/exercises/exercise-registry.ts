@@ -404,6 +404,13 @@ export const EXERCISES: readonly Exercise[] = [
     title: 'Preferences panel (browser globals)',
     loadComponent: () => import('./ssr/01-preferences/preferences').then((m) => m.Preferences),
   },
+  {
+    topic: 'ssr',
+    level: 2,
+    slug: '02-news-feed',
+    title: 'News feed (hydration mismatches)',
+    loadComponent: () => import('./ssr/02-news-feed/news-feed').then((m) => m.NewsFeed),
+  },
 ];
 
 export function routesFor(topic: Topic): Routes {
