@@ -15,7 +15,7 @@ import { formatMoney } from './shared/money';
 })
 export class BoundariesDemo {
   private readonly billing = inject(InvoiceService);
-  protected readonly invoice = describeInvoice(this.billing, 1, 2);
+  protected readonly invoice = describeInvoice(this.billing.totalFor(1, 2), 1, 2);
   protected readonly price = formatMoney(inject(ProductSearch).priceWithTax(1));
   protected readonly shipping = inject(ShippingCalculator).quote(2);
 }

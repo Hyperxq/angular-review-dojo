@@ -1,6 +1,6 @@
 import { Service, inject } from '@angular/core';
-import { PriceList } from '../catalog/internal/price-list';
-import { TAX_RATE } from './tax';
+import { PriceList } from '../catalog';
+import { TAX_RATE } from '../../shared/tax';
 
 @Service()
 export class InvoiceService {

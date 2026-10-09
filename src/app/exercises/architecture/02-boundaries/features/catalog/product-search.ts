@@ -1,5 +1,5 @@
 import { Service, inject } from '@angular/core';
-import { TAX_RATE } from '../billing';
+import { TAX_RATE } from '../../shared/tax';
 import { PriceList } from './internal/price-list';
 
 @Service()
