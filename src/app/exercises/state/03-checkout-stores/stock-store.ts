@@ -14,11 +14,9 @@ export const StockStore = signalStore(
         tap((stock) => patchState(store, { stock })),
       ),
     ),
-    snapshot: () => ({ ...store.stock() }),
-    restore: (stock: Record<number, number>) => patchState(store, { stock }),
-    take(productId: number) {
+    adjust(productId: number, delta: number) {
       patchState(store, (state) => ({
-        stock: { ...state.stock, [productId]: state.stock[productId] - 1 },
+        stock: { ...state.stock, [productId]: state.stock[productId] + delta },
       }));
     },
   })),
