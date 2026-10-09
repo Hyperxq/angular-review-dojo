@@ -381,6 +381,14 @@ export const EXERCISES: readonly Exercise[] = [
     loadComponent: () =>
       import('./security/01-product-reviews/reviews-demo').then((m) => m.ReviewsDemo),
   },
+  {
+    topic: 'security',
+    level: 2,
+    slug: '02-api-client',
+    title: 'API client (tokens, CSRF, logs)',
+    loadComponent: () =>
+      import('./security/02-api-client/api-client-demo').then((m) => m.ApiClientDemo),
+  },
 ];
 
 export function routesFor(topic: Topic): Routes {
