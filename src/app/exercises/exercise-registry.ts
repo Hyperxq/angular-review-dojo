@@ -460,6 +460,14 @@ export const EXERCISES: readonly Exercise[] = [
     loadComponent: () =>
       import('./state/02-product-store/product-admin').then((m) => m.ProductAdmin),
   },
+  {
+    topic: 'state',
+    level: 3,
+    slug: '03-checkout-stores',
+    title: 'Checkout stores (optimistic updates, races, scope)',
+    loadComponent: () =>
+      import('./state/03-checkout-stores/checkout-demo').then((m) => m.CheckoutDemo),
+  },
 ];
 
 export function routesFor(topic: Topic): Routes {
