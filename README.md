@@ -25,7 +25,9 @@ The dojo has two parts:
 
 ## How to work an exercise
 
-1. Pick one from the map below, or open the app (`npm start`) and use the index page.
+1. Pick one from the map below, or open the app (`npm start`) and use the index page. If the topic folder has a
+   `LESSON.md` (for example `src/app/exercises/rxjs/LESSON.md`), read its chapter for the exercise first: it rebuilds the
+   concepts without giving the bugs away.
 2. Read its `TICKET.md`. It only describes the symptom.
 3. **Find** the defects by reading the code. The tests are not your guide yet: run them after you have a theory.
 4. **Fix** them on `main` (or on a branch of your own).
