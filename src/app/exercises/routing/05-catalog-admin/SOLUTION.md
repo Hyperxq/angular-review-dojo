@@ -3,8 +3,10 @@
 ## What was wrong
 
 1. **`providers: [DraftStore]` on each tab route.** `Route.providers` creates an *environment
-   injector for that route*. Two sibling routes that both list `DraftStore` get two instances, and
-   each is destroyed with its route, so the draft was lost on every tab switch. State shared by
+   injector for that route*. Two sibling routes that both list `DraftStore` get two instances, so
+   the name typed on General never reached Pricing. (Each tab's copy outlives the tab switch: the
+   route injector is cached on the `Route` and, by default, is not destroyed when the user leaves.
+   That is why General still shows the name when you come back.) State shared by
    several routes belongs on the closest common **parent** route (here the one with
    `component: ProductsLayout`): the children's injectors are children of it.
 2. **`confirmLeave` always called `confirm()`, on the wrong route.** It sat on the `general` tab
@@ -44,11 +46,20 @@ this.title.setTitle(pageTitle ? `${pageTitle} | Admin` : 'Admin');
 - `canDeactivate` runs for the *route being left*. On a parent route it does not fire when
   switching between child tabs.
 - A route's `title` can also be a `ResolveFn<string>` for dynamic titles.
+- A route's `providers` injector is created the first time the route is activated and cached on
+  the `Route`. It is not destroyed when the user navigates away unless the app opts in with
+  `provideRouter(routes, withAutoCleanupInjectors())` (the default `RouteReuseStrategy` then allows
+  it). This app does not opt in, so after the fix the draft also survives leaving the editor and
+  coming back. If every visit must start with an empty draft, give it a component owner instead:
+  `providers: [DraftStore]` on `ProductsLayout` (the tabs render inside its outlet, so they still
+  resolve it), and it is destroyed with the layout.
 
 ## Modern Angular takeaway
 
-- Route-level `providers` are the scoped alternative to `providedIn: 'root'`: shared by a
-  subtree, created on entry, destroyed on exit. Put them at the right level of the tree.
+- Route-level `providers` are the scoped alternative to `providedIn: 'root'`: they control who
+  shares an instance (the route's subtree), not how long it lives. By default the instance is
+  created on first entry and kept after the user leaves. For a per-visit lifetime, provide it on
+  a component that owns the visit, or opt in to `withAutoCleanupInjectors()`.
 - Guards return decisions; decide first, only then interact with the user.
 
 ## What a reviewer should say in the PR comment

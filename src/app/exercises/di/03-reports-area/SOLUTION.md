@@ -32,9 +32,12 @@ providers: [provideHttpClient(withRequestsMadeViaParent(), withInterceptors([rep
 ## Tradeoffs and discussion
 
 - **Who owns `Selection`?** Root scope is the simplest way to let the shell see the page's selection, but it means the selection
-  survives leaving and re-entering the area. If it should die with the area, scope it on the area's **parent** route
-  (`providers: [Selection]` on the route that also holds the shell and the page), so both resolve the same instance and it is destroyed on exit.
-  Component `providers` can never be seen by an ancestor.
+  survives leaving and re-entering the area. Scoping it on the area's **parent** route (`providers: [Selection]` on the route that
+  also holds the shell and the page) makes it private to the area and shared by both, but does not shorten its life: the route
+  injector is cached on the `Route` and, unless the app opts in with `provideRouter(routes, withAutoCleanupInjectors())`, it is not
+  destroyed when the user leaves. If the selection should start empty on every visit, give it a component owner:
+  `providers: [Selection]` on `ReportsShell`, which the badge and the page (rendered in the shell's outlet) both resolve, and which
+  is destroyed with the shell. Component `providers` can never be seen by an ancestor.
 - **Feature-level interceptor vs. interceptor with URL check:** a route-level client with its own interceptor keeps the feature self-contained;
   a global interceptor with a path check is easier to find. Pick one, and be explicit.
 - **Lazy routes and singleton services:** `providedIn: 'root'`/`@Service()` classes live in the root injector even if only a lazy bundle
