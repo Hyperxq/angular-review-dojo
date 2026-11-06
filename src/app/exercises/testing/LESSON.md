@@ -76,8 +76,8 @@ Runner defaults that matter for every exercise in this folder (read from the ins
 | `expectAsync(p).toBeResolved()` | `await expect(p).resolves...` |
 | `it('...', done => { ...; done(); })` | an `async` test; Vitest throws "done() callback is deprecated, use promise instead" |
 
-Two Vitest additions you did not have: `expect.assertions(n)` and `expect.hasAssertions()` fail a test if fewer
-assertions ran than expected, and an un-awaited `expect(...).resolves`/`.rejects` is reported as an error instead of
+Two Vitest additions you did not have: `expect.assertions(n)` and `expect.hasAssertions()` fail a test unless exactly n
+assertions ran, or none ran at all, and an un-awaited `expect(...).resolves`/`.rejects` is reported as an error instead of
 passing silently. One limit of this builder: `vi.mock` of relative imports is not supported, so you replace
 dependencies through DI providers, which is the Angular way anyway.
 
@@ -181,7 +181,7 @@ The exercise has more than one such test, of more than one kind. Find them with 
 ### Rules have edges
 
 A rule in a ticket ("members with three or more late returns pay a deposit") has an edge, and off-by-one bugs live on it.
-A value from the middle of the range proves the rule exists; only the values just below and just above the edge prove
+A value from the middle of the range proves the rule exists; only the last value without the effect and the first with it (two and three here) prove
 where it is. When you read a test of a rule, find the edge in the ticket and check that the test sits on both sides of it.
 
 ### Review questions
