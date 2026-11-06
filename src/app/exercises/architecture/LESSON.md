@@ -34,7 +34,7 @@ Structure is overhead until one of these forces is real. A two-person app with f
 | Label | Library example |
 |-------|-----------------|
 | blocking | Members see wrong data (the opening hours of another branch); something hard to undo (a public URL members have bookmarked changes shape); a contract another team consumes breaks (an export the holds team imports from `loans/index.ts` is renamed). |
-| should-fix | A real cost with a clear fix: a new import that reaches into another team's internals, a reusable component that navigates on its own. |
+| should-fix | A real cost with a clear fix: a new import that reaches into another team's internals (blocking once a change on their side has already broken the build), a reusable component that navigates on its own. |
 | nit | A file name that does not match the class inside it. |
 | question | Taste or an open design choice: "would `fines` be better as its own feature?" |
 
@@ -330,7 +330,7 @@ every feature calls it for anything about books, and replacing it keeps getting 
 
 ### Reasons to change
 
-The single responsibility principle is easiest to apply in its original wording: a module should have one reason to change,
+The single responsibility principle is easiest to apply with its author's later clarification: a module should have one reason to change,
 meaning one group of people who ask for its changes. Two related ideas make it measurable in a review:
 
 - Cohesion: the parts of a module change together and for the same people.
