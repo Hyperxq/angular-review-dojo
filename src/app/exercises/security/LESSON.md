@@ -56,7 +56,7 @@ you must opt out explicitly. The code around it moved.
 
 | Area | Angular 17 | Angular 22.2.2 (verified in the installed package) |
 |------|------------|------------------------------------------------------|
-| HTTP setup | `provideHttpClient(...features)` already existed next to `HttpClientModule`. | `provideHttpClient(...)` with functional interceptors (`withInterceptors([fn])`) is the norm. XSRF protection is on by default; `withXsrfConfiguration({ cookieName, headerName })` renames it, `withNoXsrfProtection()` turns it off. |
+| HTTP setup | `provideHttpClient(...features)` already existed next to `HttpClientModule`. | `provideHttpClient(...)` with functional interceptors (`withInterceptors([fn])`) is the norm. XSRF protection is on by default, as it was in 17; `withXsrfConfiguration({ cookieName, headerName })` renames it, `withNoXsrfProtection()` turns it off. |
 | HTTP backend | `XMLHttpRequest`. | `fetch` by default, and request options accept fetch's `credentials`, `referrer` and `referrerPolicy` next to the older `withCredentials`. |
 | `DOCUMENT` | Only from `@angular/common`. | Exported from `@angular/core`, re-exported from `@angular/common`. |
 | URL sanitizer | Rewrites unsafe URLs to `unsafe:...`. | Rewrites a `javascript:` URL to `unsafe:javascript:...` and warns in dev mode. |
