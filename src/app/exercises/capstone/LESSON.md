@@ -129,7 +129,7 @@ loses credibility for the comments that matter, and wastes the author's time def
 When something looks suspicious, check it before you comment. If it turns out fine, either leave no comment or, when another
 reader might stumble on it the same way, write one line that says so:
 
-> Looked twice at `HoldRules` being a `@Service()` that uses `inject()` with no constructor: `@Service()` classes cannot
+> Looked twice at `HoldRules` being a `@Service()` that uses `inject()` instead of constructor parameters: `@Service()` classes cannot
 > use constructor injection, so this is the required form. Fine as is.
 
 "Fine" applies to the line you checked, not to whatever is piped into it. A correct API call can still receive the wrong

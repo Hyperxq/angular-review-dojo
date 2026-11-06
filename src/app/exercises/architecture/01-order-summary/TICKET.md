@@ -8,7 +8,7 @@
    with the shared pricing rules) says $544.50, because orders of **$500 or more** get the 10% volume discount.
 2. A developer who wanted to show the summary in the storybook / in a unit test could not render it without setting up
    the HTTP client and the whole fake API, although the component "only" shows the lines it is given.
-3. The same page makes the stock request from two places depending on where you look. Nobody knows who owns the data.
+3. Data loading is split between the page and this component, so nobody knows who owns the data.
 
 ## Expected
 

@@ -4,8 +4,8 @@
 
 ## What we see
 
-1. The build prints a circular dependency warning between billing and catalog, and the unit tests of one of them
-   randomly fail with "cannot access X before initialization" depending on which file is loaded first.
+1. The architecture check reports a circular dependency between the billing and catalog features, and nobody can say
+   which way the dependency between them should point.
 2. The catalog team renamed a file in their `internal` folder; the billing feature stopped compiling. Billing "only" imports
    one class from there.
 3. The shipping team wants to move their feature into its own library. They found that the shared folder, which every

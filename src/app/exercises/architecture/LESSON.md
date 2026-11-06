@@ -52,7 +52,7 @@ feature's public surface must be declared another way (usually an `index.ts`) an
 Feature scoping moved to the router: `loadChildren` and `loadComponent` draw the lazy boundary, and a route's `providers`
 array scopes services to that part of the app.
 
-### Component contracts are signals
+### Component contracts are signal inputs and outputs
 
 Signal inputs and outputs make a component's contract readable at a glance:
 
@@ -209,7 +209,7 @@ splitting a component would add a file and buy nothing, say "fine for now" and m
 Two forces meet at a feature boundary. Lazy loading only saves bytes if nothing eager reaches into the lazy part; the people
 who pay when it fails are members on slow phones downloading code for screens they never open. And a team can only reshape
 its own code if nobody else depends on the inside of it; the people who pay are the owners, whose internals turn into a
-contract they never agreed to. In a codebase without NgModules, the compiler enforces neither.
+contract they never agreed to. The compiler enforces neither, with or without NgModules.
 
 ### A feature has a public API
 

@@ -1,6 +1,6 @@
 # L3 - Shop (maintainability)
 
-**Reported by:** Engineering manager and the three teams working on the shop  |  **Area:** Whole shop module  |  **Priority:** Medium
+**Reported by:** Engineering manager and the four teams working on the shop  |  **Area:** Whole shop module  |  **Priority:** Medium
 
 ## What we see
 
