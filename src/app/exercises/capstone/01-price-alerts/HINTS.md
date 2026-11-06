@@ -21,7 +21,7 @@ maintainability, then performance, tests, and finally style. For each comment de
 
 Blocking: the note rendering, the retry on `POST`, the search that can show stale results, and the duplicated store. Should-fix: the
 polling subscription, optimistic delete without rollback, accessibility of the buttons and errors, template business
-rule, `track $index`, silent HTTP errors. Fine: the route-level HTTP provider with `withRequestsMadeViaParent()`, the `effect`
+rule, `track $index`, silent HTTP errors. Fine: the route-level HTTP provider with `withRequestsMadeViaParent()` and the second `AlertsApi` next to it, the `effect`
 writing to `localStorage`, `subscribe()` without unsubscribe on finite HTTP calls.
 
 </details>

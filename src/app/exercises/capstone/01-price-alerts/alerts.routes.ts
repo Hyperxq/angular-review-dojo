@@ -4,6 +4,7 @@ import {
   withRequestsMadeViaParent,
 } from '@angular/common/http';
 import { Routes } from '@angular/router';
+import { AlertsApi } from './alerts-api';
 import { alertsDemoBackend } from './alerts-demo-backend';
 import { AlertsPage } from './alerts-page';
 
@@ -13,6 +14,7 @@ export const ALERT_ROUTES: Routes = [
     component: AlertsPage,
     providers: [
       provideHttpClient(withRequestsMadeViaParent(), withInterceptors([alertsDemoBackend])),
+      AlertsApi,
     ],
   },
 ];
