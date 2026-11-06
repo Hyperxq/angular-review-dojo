@@ -118,7 +118,7 @@ visible in the template, if you know what to read.
 ### The mental model: the accessibility tree
 
 The browser builds a second tree next to the DOM, and assistive technology reads that one. Each node has a **role** (what
-it is), a **name** (what it is called), and **states** (expanded, current, invalid). How an element looks does not give it a role (although CSS that hides it removes it from the tree). An
+it is), a **name** (what it is called), and **states** (expanded, current, invalid). How an element looks does not give it a role (although `display: none` or `visibility: hidden` removes it from the tree). An
 element that looks like a link but is a `span` with a click handler is, in the tree, a piece of text.
 
 Here is the pagination bar of the library's search results on page 2, the way a screen reader sees it when it is built
