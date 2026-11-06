@@ -42,13 +42,13 @@ for the author: the other findings below stay in the code as the "requested chan
 | S6 | `alerts-page.ts` | A request per keystroke with no debounce, and two sources of truth (`results` vs `store.alerts`): an alert created while a search is active does not show. | `debounceTime(300)`; filter locally if the list is small, or put the query in the store. |
 | S7 | `alerts-page.ts` | The business rule "target reached" (`priceOf(id) <= target`) lives in a template, with `Infinity` as the default and the seed catalog as the price source. | A pure function with a unit test; real prices from the API. |
 | S8 | `alert-form.ts` | Only `required` on the price: `0` and negative prices are accepted; `Number(productId)` and `!` signal a loose model. | `Validators.min(0.01)`, a typed `productId` (`valueAsNumber` or `compareWith`). |
-| S9 | `alerts.routes.ts` | The in-memory backend ships in the production route config. | Provide it only in dev (environment/provider flag) or delete before merge. |
+| S9 | `alerts.routes.ts`, `app.config.ts` | The in-memory backend ships in the production config, registered twice (route and app). | Provide it only in dev (environment/provider flag) or delete before merge. |
 | S10 | PR | Tests missing for the changes. | At least one test per blocking item. |
 
 ### Nits
 
 - `AlertsStore.error` is a public writable signal: expose it read-only (`asReadonly()`), as was done for `alerts`.
-- `alerts-demo-backend.ts` imports from `rxjs` twice and keeps module-level mutable state (fine for a mock, but then say so in a comment).
+- `alerts-demo-backend.ts` imports from `rxjs` twice and keeps module-level mutable state (fine for a mock, and it is what lets both registrations serve one list; say so in a comment).
 - `lastCheck` formatting `mediumTime` shows seconds; "Last checked 2 min ago" may be friendlier. Product decision.
 - `ShellHost`-style naming and file organisation are fine; consider a `features/alerts/index.ts` public API if more features are coming.
 
@@ -64,9 +64,12 @@ for the author: the other findings below stay in the code as the "requested chan
    (Only if SSR is enabled would I ask for a platform guard; it is not.)
 2. **`subscribe()` without unsubscribing in `load()`/`add()`.** `HttpClient` calls emit once and complete, so there is nothing to leak. The real
    problem is the missing **error** handling (S3), and that is what to comment on. Contrast with S1, where the interval never completes.
-3. **`provideHttpClient(withRequestsMadeViaParent(), withInterceptors([...]))` in the route's `providers`.** Looks like the classic "a lazy route re-provided
-   `HttpClient`" bug, but `withRequestsMadeViaParent()` is the correct form: the route's interceptor runs, then the parent chain. (The issue is only that it
-   hosts a mock: S9.)
+3. **`provideHttpClient(withRequestsMadeViaParent(), withInterceptors([...]))` and `AlertsApi` in the route's `providers`.** Looks like the classic "a
+   lazy route re-provided `HttpClient`" bug, but `withRequestsMadeViaParent()` is the correct form: for requests made through the route's client, the
+   route's interceptor runs, then the parent chain. The route's `AlertsApi` is what uses that client: in the PR, the page's search and the page's own
+   store resolve it. `AlertsApi` is also auto-provided in root, and a root instance only sees the app's `HttpClient`, which is why the PR registers the
+   backend in `app.config.ts` too: the header badge's store (root) goes through it, and so does every call on this branch once B4 is fixed. Two instances
+   of a stateless client are harmless, and both registrations read and write the same module-level list. (The issue is only that it hosts a mock: S9.)
 4. *(minor)* `find(...)!` in the form: the options come from the same array, so it cannot be `undefined` there; only worth a comment if the data source changes.
 
 Flagging these would cost credibility and review time. Saying "this is fine, I checked" in one line is a legitimate and useful comment.

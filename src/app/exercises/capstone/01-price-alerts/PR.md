@@ -14,8 +14,11 @@ drops to the target (or below) the alert is highlighted with "Target reached".
 - the list refreshes every 30 s so "Target reached" stays current
 - `AlertsApi.create` retries up to 3 times: the staging API drops about 1 in 10 requests and QA kept seeing "could not
   create the alert"
-- there is a temporary in-memory backend (`alerts-demo-backend.ts`, route-level interceptor) until the real
-  endpoints land; I made it delegate to the parent client so the app interceptors still apply
+- there is a temporary in-memory backend (`alerts-demo-backend.ts`) until the real endpoints land. The alerts route
+  provides its own `HttpClient` with the backend as an interceptor (I made it delegate to the parent client so the app
+  interceptors still apply) and its own `AlertsApi`, so the page's calls go through that client. `AlertsApi` is still
+  auto-provided in root too, and a root instance uses the app's `HttpClient`, so I also registered the backend in
+  `app.config.ts`. Both registrations share the same in-memory list
 
 ## How I tested
 
