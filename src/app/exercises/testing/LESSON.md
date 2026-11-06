@@ -59,7 +59,7 @@ Runner defaults that matter for every exercise in this folder (read from the ins
 | `globals: true` | `describe`, `it`, `expect` and `vi` exist without imports, as Jasmine's did. |
 | `isolate: false` | Spec files share one environment per worker "to align with the Karma/Jasmine experience". A value left in `localStorage`, a cookie, or a stubbed global can be seen by the next **file**, not only the next test. |
 | TestBed cleanup hooks | The builder registers `beforeEach`/`afterEach` hooks that reset the TestBed around every test. Each test gets a fresh injector, but only for what it gets **from** the TestBed. |
-| Mocks between files | Vitest calls `vi.restoreAllMocks()` after each file. Nothing restores fake timers. |
+| Mocks between files | Vitest calls `vi.restoreAllMocks()` after each file, which restores `vi.spyOn` spies. Nothing restores fake timers. |
 | Advanced options | Anything else (shuffling, custom reporters) goes into a Vitest config file passed with the builder's `runnerConfig` option; `ng test` has no flag for it. |
 
 ### Jasmine to Vitest, the short dictionary
@@ -86,7 +86,7 @@ dependencies through DI providers, which is the Angular way anyway.
 `vi.useFakeTimers()` replaces `setTimeout`, `setInterval`, `Date` and friends for the whole environment. With
 `isolate: false` that environment outlives the file, and since nothing restores timers automatically, a test that turns
 them on and never off hands a frozen clock to whatever runs next. The failure then appears far from its cause, as a
-timeout or a date from 1970 in an unrelated test. Tie the undo to the test, so it runs even when the test fails:
+timeout or a stopped clock in an unrelated test. Tie the undo to the test, so it runs even when the test fails:
 
 ```ts
 vi.useFakeTimers();
@@ -347,7 +347,7 @@ Treat "passes only in sequence" as a bug in the suite, the same way you treat a 
 ### Every assertion should be able to say no
 
 For each matcher in a suite, invent a wrong result that still passes it. If you can do it easily, ask whether the test
-needed that looseness (a generated id, a float from arithmetic) or only tolerated it because the exact value was not
+needed that looseness (a generated id, a float from arithmetic that is not money) or only tolerated it because the exact value was not
 known. The same goes for waiting: a test that waits on real time is slow on every run and still flaky on a machine slower
 than its margin, while fake timers (chapter 0) make the clock an input you control.
 

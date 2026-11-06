@@ -53,7 +53,7 @@ same measurement the same way. If the number did not move, the change was not th
 
 ### Who triggers a render
 
-In v17, Zone.js patched every async browser API. When any callback finished, Angular ran change detection over the tree,
+In v17, Zone.js patched almost every async browser API. When any callback finished, Angular ran change detection over the tree,
 needed or not. Performance work was about stopping it: OnPush, `runOutsideAngular`, detaching change detectors.
 
 This app is zoneless. `zone.js` is not installed, and since v21 zoneless is Angular's default, with nothing to configure.
@@ -348,7 +348,7 @@ export class ShelfGrid {
 }
 ```
 
-With Zone.js, the observer's callback triggered a global change detection and the grid updated. Zoneless, the field
+Default Zone.js does not patch `ResizeObserver` (that takes an opt-in plugin), so this was a bug before too. Zoneless, the field
 changes and nothing renders it until some unrelated event happens to check this view. The rule for zoneless code: state the
 template reads must be a signal, or the code that changes it must go through one of the notifiers in Chapter 0.
 
@@ -552,7 +552,7 @@ When not to defer:
 ### Barrels and side effects
 
 An `index.ts` that re-exports a folder (`export * from './...'`) is convenient for imports and dangerous for bundles. Import
-one constant from it and the bundler has to evaluate every module it re-exports. Tree shaking can drop exports nobody uses,
+one constant from it and the bundler has to include and analyse every module it re-exports. Tree shaking can drop exports nobody uses,
 but it must keep any module with top-level side effects: code that runs when the file is evaluated, such as
 `registerLocaleData(localeFr)` at the top of a file, or a polyfill that patches a global. A barrel imported from the first
 screen can pull the lazy parts of a feature back into the initial chunk.

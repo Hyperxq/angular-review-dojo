@@ -29,5 +29,5 @@ on the route (the area's own interceptor, then the parent's chain). Delete `Audi
 ---
 
 Tests won't catch whether the shell and the page should share `Selection` through the root at all (a route-level
-`providers: [Selection]` on the **parent** route would scope it to the area and destroy it when the user leaves): a design
-choice for the PR discussion, covered in `SOLUTION.md`.
+`providers: [Selection]` on the **parent** route would scope it to the area, but it would still survive leaving the area, since
+route injectors are not destroyed by default): a design choice for the PR discussion, covered in `SOLUTION.md`.

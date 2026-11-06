@@ -6,7 +6,7 @@ Facts here are from the installed Angular 22.2.2 type definitions and from runni
 
 ```
 constructor                    inputs are NOT set yet (signal inputs: reading a required one throws NG0950)
-  -> ngOnChanges               only for decorator @Input()s, when a binding gets a new reference
+  -> ngOnChanges               for @Input()s and signal input()s alike, when a binding gets a new reference
   -> ngOnInit                  once, after the first binding
   -> ngDoCheck                 every time the PARENT view is checked (even for OnPush children)
   -> ngAfterContentInit        once, after projected content is initialised

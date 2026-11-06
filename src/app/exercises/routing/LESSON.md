@@ -146,7 +146,7 @@ An entry that no URL can reach is a common bug, and a silent one.
 
 `pathMatch: 'prefix'` (the default) means "my segments match the start of the URL". `'full'` means "my segments are the
 whole URL". An empty path with prefix matching matches the start of every URL, which is why Angular 22 refuses
-`{ path: '', redirectTo: 'books' }` without `pathMatch: 'full'` and throws `NG04014` when it processes the config. A
+`{ path: '', redirectTo: 'books' }` without `pathMatch: 'full'` and, in development mode, throws `NG04014` when it processes the config. A
 non-empty redirect keeps prefix matching and carries the rest of the URL along: `{ path: 'catalogue', redirectTo: 'books' }`
 sends `/catalogue/42` to `/books/42`.
 
@@ -355,7 +355,7 @@ Facts about `canMatch` to carry along:
   an area the user is already in.
 - When it returns `false`, the route does not match and the router tries the next entries in the array. The URL may end at
   `**`, so the user sees "not found" instead of a redirect. Return a `UrlTree` when you want a redirect.
-- It does not stop preloading. The preloader skips a lazy route only when `canLoad` is defined, so
+- It does not stop preloading. The preloader skips lazy children (`loadChildren`) only when `canLoad` is defined, so
   `withPreloading(PreloadAllModules)` still downloads bundles guarded by `canMatch`.
 - Like every guard, it only runs when a navigation happens. If the state it checks changes while the user sits on a page,
   nothing reacts until the next navigation, unless your code navigates.

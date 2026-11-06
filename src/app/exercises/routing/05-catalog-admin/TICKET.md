@@ -5,8 +5,8 @@
 ## What we see
 
 1. In the product editor I type a product name on the General tab, switch to Pricing and the page
-   says "Pricing for a new product". Going back to General, the name field is empty again. The
-   name only survives if I never change tabs.
+   says "Pricing for a new product". Going back to General, the name I typed is still in the field,
+   but Pricing never shows it, however many times I switch.
 2. Switching between the General and Pricing tabs after typing a name asks "You have unsaved
    changes. Leave anyway?", although nothing is being left. Leaving the editor (for example to the
    Dashboard) always asks the same, even when I have not typed anything or have just pressed Save.
