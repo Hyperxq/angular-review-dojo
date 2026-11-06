@@ -308,7 +308,8 @@ you mean?
 ### A rule about several controls lives on their parent
 
 A validator sees only the control it is attached to. A rule that involves two dates, or every line in a list, cannot be
-expressed on any one of them. Put it on the group or array that contains them all, and type it so the compiler checks the shape:
+expressed on any one of them. Put it on the group or array that contains them all, and type what it reads so the body uses named fields. The cast is
+trusted, not checked: the compiler cannot tell whether the group you attach it to has those fields:
 
 ```ts
 const returnAfterPickup: ValidatorFn = (control) => {
@@ -504,9 +505,9 @@ The `formRoot` directive calls `preventDefault()` on the native submit and runs 
 
 > [!WARNING]
 > The default check is "not invalid" (`ignoreValidators: 'pending'`), so pending async validators do not block the action. It
-> is the same three-state trap as in chapter 2. Set `ignoreValidators: 'none'` when the action must wait for every check to
-> pass, either in the `submission` options of `form()` (which is where `formRoot` reads it) or in the options you pass to
-> `submit()`.
+> is the same three-state trap as in chapter 2. Set `ignoreValidators: 'none'` when the action needs a valid form, either in
+> the `submission` options of `form()` (which is where `formRoot` reads it) or in the options you pass to `submit()`. It does
+> not wait: while a check is pending, `submit()` calls `onInvalid` and returns `false`, so tell the user a check is running.
 
 ### Custom controls without a value accessor
 

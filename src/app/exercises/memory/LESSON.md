@@ -22,14 +22,14 @@ How to use this lesson:
 The garbage collector frees an object when nothing reachable points to it. Reachable means there is a chain of references from
 a root: `window`, `document`, the list of active timers, the root injector, module-level variables. A destroyed component that
 is still at the end of such a chain stays in memory, with its view, its DOM nodes and everything they reference. Every leak in
-this topic has that shape. Every fix cuts the chain at the link closest to the root.
+this topic has that shape. Every fix cuts the link where the long-lived side holds the component.
 
 ### When a leak matters
 
 A leak costs roughly the retained size of one occurrence, times the occurrences per session, times the length of the session,
 measured against the memory the device can spare. Two kilobytes per route change on a page people reload every few minutes is
-noise. The same two kilobytes on a staff terminal at the circulation desk that stays open all day, eight hours of route changes,
-ends in a crashed tab. A leak that retains a whole view, with its DOM and its data, matters even in short sessions.
+noise. On a staff terminal at the circulation desk that stays open all day, the same two kilobytes add up for eight hours and
+nothing resets them. A leak that retains a whole view, with its DOM and its data, is what crashes a tab, even in short sessions.
 
 ### When you do not need cleanup
 
@@ -122,7 +122,7 @@ same constructor. A reviewer reads the constructor top to bottom and sees the st
 Some leaks are easy to test (create and destroy a component, count what is left). All of them are visible:
 
 1. In DevTools, open the Command menu (`Cmd+Shift+P` or `Ctrl+Shift+P`), run "Show Performance monitor".
-2. Watch "JS event listeners", "DOM Nodes" and "JavaScript heap size".
+2. Watch "JS event listeners", "DOM Nodes" and "JS heap size".
 3. Visit the page once and leave it as a warm-up, so one-off lazy loading is out of the way. Then visit and leave ten times.
 
 A healthy page comes back to the same numbers. A counter that grows by a fixed amount on every visit is a leak, and the amount
@@ -315,7 +315,7 @@ for (const tip of tooltips) {
 }
 ```
 
-The rule is to batch: all reads first, then all writes. The render hooks make the batching explicit with phases that run in a
+The rule is to batch, so layout runs once: group the writes together and the reads together. The render hooks make the batching explicit with phases that run in a
 fixed order across all components: `earlyRead`, `write`, `mixedReadWrite`, `read`. Each phase receives the result of the
 previous one. The Angular docs ask you to prefer `write` and `read` over the other two:
 

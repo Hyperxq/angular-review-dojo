@@ -264,7 +264,7 @@ export class Copies {
 
 `ngTemplateContextGuard` types `let n = index`. A `static ngTemplateGuard_<inputName>` (for example
 `ngTemplateGuard_appCopies: 'binding'`) tells the checker to narrow the template's types the way `@if` does. Without them,
-everything inside is `any`.
+the `let` variables are `any` and nothing is narrowed; the rest of the template is still type-checked.
 
 ### Keeping imperative work in step with signals
 
