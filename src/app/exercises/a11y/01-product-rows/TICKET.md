@@ -6,10 +6,10 @@
 
 1. With only the keyboard, Tab skips the product names: there is no way to select a product. A screen reader reads
    the names as plain text and never says that they can be activated.
-2. The heart and cross buttons are announced as "button" followed by nothing useful (or "black heart suit",
+2. The heart and cross buttons are announced as "button" followed by nothing useful (or "white heart suit",
    "multiplication x"). Nobody can tell which product they act on.
-3. The search box and the quantity boxes are announced as "edit text" with no name; the only hint is a placeholder that
-   disappears once you type.
+3. The search box has no label, only a placeholder that disappears once you type, and the quantity boxes are announced
+   as "spin button" with no name at all.
 4. When tabbing through the page it is impossible to see where the focus is.
 
 ## Expected

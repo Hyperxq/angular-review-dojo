@@ -13,7 +13,7 @@ have a role? A name? Can you reach them with Tab?
 - An icon-only button needs an **accessible name**. Which attribute provides one, and what should the icon glyph do
   so it is not read twice (`aria-hidden`)? What should the name say to be useful out of context?
 - A placeholder is not a label. Which element, or attribute, names an `<input>`?
-- What does a global `outline: none` on `:focus` do to a keyboard user? Which pseudo-class shows the ring only when the
+- What does an `outline: none` on `button:focus, input:focus` do to a keyboard user? Which pseudo-class shows the ring only when the
   keyboard is being used?
 
 </details>

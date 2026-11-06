@@ -75,7 +75,7 @@ WAI-ARIA roles and states, the accessible name rules and the WAI-ARIA Authoring 
 
 Two consequences of the v22 defaults are worth keeping in mind:
 
-- This app is zoneless. A `setTimeout` still runs its callback, but nothing re-renders because of it. DOM work that must
+- This app is zoneless. A `setTimeout` still runs its callback, but the timeout itself schedules no render. DOM work that must
   wait for the render belongs in `afterNextRender` or `afterRenderEffect`.
 - `@if` adds and removes DOM. That matters for focus (an element that is removed loses focus) and for announcements
   (chapters 2 and 3).
@@ -118,7 +118,7 @@ visible in the template, if you know what to read.
 ### The mental model: the accessibility tree
 
 The browser builds a second tree next to the DOM, and assistive technology reads that one. Each node has a **role** (what
-it is), a **name** (what it is called), and **states** (expanded, current, invalid). Styling does not enter it. An
+it is), a **name** (what it is called), and **states** (expanded, current, invalid). How an element looks does not give it a role (although CSS that hides it removes it from the tree). An
 element that looks like a link but is a `span` with a click handler is, in the tree, a piece of text.
 
 Here is the pagination bar of the library's search results on page 2, the way a screen reader sees it when it is built
@@ -438,7 +438,7 @@ replaces the main content of a single-page app: what did the browser do here tha
 2's timing rule still holds for anything that involves focus: the target must exist first.
 
 Titles are a router concern in Angular: the router owns a `TitleStrategy` that writes the document title after each
-navigation. Find where the app configures it, and what it does for each route, before you decide whether titles are
+navigation. Find which strategy the app uses, and what it does for each route, before you decide whether titles are
 right.
 
 Mapping the rest to the router (which event, which element, which moment) is the exercise's job.

@@ -43,7 +43,7 @@ export const requestIdInterceptor: HttpInterceptorFn = (req, next) =>
   next(req.clone({ setHeaders: { 'X-Request-Id': crypto.randomUUID() } }));
 ```
 
-An id generated inside an interceptor identifies one attempt. An id that should follow one user intent (one "borrow" click,
+An id generated inside an interceptor identifies one run of that interceptor; a retry below it reuses the id. An id that should follow one user intent (one "borrow" click,
 however many requests it causes) has to be created where the intent happens and passed down, for example in an
 `HttpContext`. For tracing across services, the W3C `traceparent` header is the standard alternative to a home-made header.
 
@@ -98,7 +98,7 @@ long as the browser allows.
 
 `ErrorHandler` is the same token you knew: Angular calls its `handleError` for errors thrown in templates, event handlers and
 lifecycle hooks. Two things are new. `provideBrowserGlobalErrorListeners()` forwards the window's `error` and
-`unhandledrejection` events to that handler, so promise rejections that used to vanish now arrive there too. And because the
+`unhandledrejection` events to that handler, so promise rejections that a zoneless app would otherwise only log to the console arrive there too. And because the
 app is zoneless, there is no Zone catching async errors on Angular's behalf: the global listeners are how they reach you.
 
 ## Chapter 1: an error is information (exercise 01)

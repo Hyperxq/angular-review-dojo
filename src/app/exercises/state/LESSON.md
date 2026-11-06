@@ -31,7 +31,7 @@ Every rung up adds ceremony, so climbing higher than the state needs is a cost t
 
 Most of what a library app shows belongs to the server: books, loans, availability. On the client it is a **cache**, and a
 cache raises questions that client state does not: how old is it, who invalidates it, and what does the screen show while
-it reloads? `resource`, `rxResource` and `httpResource` in `@angular/core` and `@angular/common/http` (stable since v22),
+it reloads? `resource`, `rxResource` and `httpResource` in `@angular/core`, `@angular/core/rxjs-interop` and `@angular/common/http` (stable since v22),
 and `@ngrx/signals/resource` for stores, are built for that. Client state (a draft, a selection, an open panel) has no
 second copy anywhere, so it never goes stale; it just has to be correct. Treat "stale data" as a topic of its own: ask
 when each cached value was fetched and what refreshes it.

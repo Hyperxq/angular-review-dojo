@@ -8,7 +8,7 @@
    close it. A screen reader says "button, Relevance": it never says there is a list, whether it is open, or which option is
    selected.
 2. The "Delete account" confirmation opens, but keyboard focus stays on the page behind it: pressing Tab walks through
-   the page, Enter on the focused "Delete account" button opens it again, and a screen reader does not announce a dialog at
+   the page, Enter on the focused "Delete account" button is still accepted while the dialog is open, and a screen reader does not announce a dialog at
    all. Escape does nothing, and after closing it the focus is lost (it starts again from the top of the page).
 3. Submitting the newsletter form with an invalid email shows a red message, but screen reader users hear nothing. The
    field is not marked as invalid and is not connected to the message.

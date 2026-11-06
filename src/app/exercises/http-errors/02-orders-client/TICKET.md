@@ -6,8 +6,9 @@
 
 1. Customers were charged twice. Looking at the payment provider's log, the order endpoint received the same order up to
    three times, a few hundred milliseconds apart, whenever the provider answered with a `500` the first time.
-2. When one request fails the screen shows three identical red toasts ("GET /api/products failed (503)") even though the
-   request is retried and the third attempt succeeds, in which case the customer should not see any error at all.
+2. When one request fails the screen shows a red toast ("GET /api/products failed (503)") for every failed attempt, even
+   though the request is retried: two toasts when the third attempt succeeds, in which case the customer should not see
+   any error at all, and three when every attempt fails.
 3. A request that gets `404 Not Found` (a product that no longer exists) is also repeated twice before the error shows.
 4. After the customer logs in again (new token) while a failing request is being retried, the retries still go out with
    the old token and are rejected with `401`.

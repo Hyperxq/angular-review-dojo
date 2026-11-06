@@ -7,11 +7,11 @@
 1. When a product runs out, "Add to cart" shows the item in the cart straight away (that is the intent: instant feedback),
    but when the server then answers "sold out" the stock goes back up while the cart **keeps the item**. The customer
    checks out an item that does not exist.
-2. A customer on a busy day clicked "Add to cart" on two different keyboards a split second apart. One request failed. After
+2. A customer on a busy day clicked "Add to cart" on two different keyboard products a split second apart. One request failed. After
    the failure, the **other** keyboard's stock number jumped back up, although its reservation had succeeded; the
    page then offered units that were already reserved.
 3. In the shared kiosk at the shop, Ana added a mouse to her cart and signed out. Marcus signed in and found the mouse in
-   his cart. Worse: a late failure for Ana's request removed Marcus's own mouse.
+   his cart. He added a mouse of his own. Worse: a late failure for Ana's request put the mouse stock back up, as if Marcus's own reservation had never happened.
 
 ## Expected
 
