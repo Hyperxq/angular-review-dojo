@@ -6,6 +6,20 @@ import { getByRole } from '../../../core/a11y-queries';
 import { ORDER_ROUTES } from './orders.routes';
 import { OrdersShell } from './orders-shell';
 
+describe('L3 - order tracker, mounted under a prefix', () => {
+  it('keeps the "Orders" link inside the exercise', async () => {
+    TestBed.configureTestingModule({
+      providers: [
+        provideRouter([{ path: 'a11y/orders', component: OrdersShell, children: ORDER_ROUTES }]),
+      ],
+    });
+    const harness = await RouterTestingHarness.create('/a11y/orders/help');
+    const root = harness.fixture.nativeElement as HTMLElement;
+
+    expect(getByRole(root, 'link', { name: 'Orders' }).getAttribute('href')).toBe('/a11y/orders');
+  });
+});
+
 describe('L3 - order tracker', () => {
   let harness: RouterTestingHarness;
   const root = () => harness.fixture.nativeElement as HTMLElement;
