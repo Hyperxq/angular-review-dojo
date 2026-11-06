@@ -5,8 +5,8 @@
 ## What we see
 
 We turned on server-side rendering for the account area. Every request to the preferences page now answers with a
-`500` and the server log shows `ReferenceError: window is not defined` (sometimes `localStorage is not defined`
-or `document is not defined`). In the browser the page worked fine before the rollout and still works when
+`500` and the server log shows `ReferenceError: localStorage is not defined` (patch that line and the next error names
+`window` or `document`). In the browser the page worked fine before the rollout and still works when
 the app is served as a plain single-page application.
 
 ## Expected

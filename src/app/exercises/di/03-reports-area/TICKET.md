@@ -5,9 +5,9 @@
 ## What we see
 
 1. After the reports area was moved to its own lazy-loaded bundle, requests made from it stopped carrying the trace header
-   that every other request has, and in the local environment they no longer reach the fake backend at all (they go to the
+   that every other request has (production registers the trace interceptor app-wide; in the dojo only the spec does), and in the local environment they no longer reach the fake backend at all (they go to the
    dev server and come back as 404). The platform team's request logging sees nothing from this area.
-2. Exports from the reports page are missing from the audit trail shown on the area's header; the compliance export
+2. Exports from the reports page are missing from the audit trail shown in the area's shell, under the page; the compliance export
    reads the application-wide audit log and finds no entries for this area.
 3. Selecting reports on the page does not change the "n selected" badge in the area's header.
 

@@ -10,7 +10,7 @@ to do (or not to do) with that part of the DOM?
 <details><summary>Hint 2 - area</summary>
 
 - `@defer (hydrate never)` is a deliberate choice. What does a block that never hydrates keep? What does it never
-  get? Which of the two components inside it needs event listeners?
+  get? Which component sits inside it, and does it need event listeners?
 - `ngSkipHydration` tells Angular to give up hydrating a component and everything inside it. Why would a developer add
   it? What was the console error telling them about the **cause**?
 - Which of the other `hydrate` triggers fit a button that the reader may want to click right away (`interaction`,
