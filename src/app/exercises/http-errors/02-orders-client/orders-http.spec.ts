@@ -76,6 +76,19 @@ describe('L2 - orders client', () => {
       expect(toasts.messages()).toEqual(['GET /api/products/99 failed (404)']);
     });
 
+    it.each([
+      [501, 'Not Implemented'],
+      [505, 'HTTP Version Not Supported'],
+    ])('are not retried on %i, which never changes on a retry', async (status, statusText) => {
+      http.get('/api/products').subscribe({ error: () => undefined });
+
+      backend.expectOne('/api/products').flush('no', { status, statusText });
+      await tick();
+
+      backend.expectNone('/api/products');
+      expect(toasts.messages()).toEqual([`GET /api/products failed (${status})`]);
+    });
+
     it('use the current token on every attempt', async () => {
       http.get('/api/products').subscribe({ error: () => undefined });
       backend.expectOne('/api/products').flush('down', serverError);

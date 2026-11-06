@@ -5,7 +5,7 @@
 | # | Finding | Severity |
 |---|---------|----------|
 | 1 | `retryInterceptor` retries **every** method, including `POST /orders`: a non-idempotent write sent up to three times (double charges). | **blocking** |
-| 2 | It retries every error, including `4xx`: a 404 or 422 will never succeed. | **blocking** |
+| 2 | It retries every error, including `4xx`: a 404 or 422 will never succeed. The same holds for `501 Not Implemented` and `505 HTTP Version Not Supported`. | **blocking** |
 | 3 | `errorToastInterceptor` sits **inside** the retry (after it in the list), so it sees every attempt: three toasts for one failed call, and a toast even when a later attempt succeeds. | **blocking** |
 | 4 | `authInterceptor` is outermost and `retry` re-subscribes to an observable whose downstream interceptors already ran: the retries reuse the first attempt's token. | **blocking** |
 | 5 | No jitter in the back-off; many clients retrying together re-create the outage. | should-fix |
@@ -21,7 +21,7 @@
   downstream chain once when it is called; `retry` re-subscribes the resulting observable. Use `defer(() => next(req))` in the retrying
   interceptor so every attempt calls `next` again.
 - **Retry policy is about safety, not hope.** Repeat only requests that are idempotent (`GET`, `HEAD`; `PUT`/`DELETE` if the API is
-  designed so) and failures that can be transient (`status === 0` network, `5xx`, optionally `429` with `Retry-After`). Anything
+  designed so) and failures that can be transient (`status === 0` network, `5xx` except `501` and `505`, optionally `429` with `Retry-After`). Anything
   else must surface immediately. Throwing from the `delay` function of `retry` ends the retries with that error.
 
 ## The fix
@@ -47,6 +47,6 @@ defer(() => next(req)).pipe(retry({
 ## What a reviewer should say in the PR comment
 
 > **Blocking:** retrying `POST /orders` double-charges when the first response is lost; restrict retries to idempotent methods
-> (or add idempotency keys). **Blocking:** retrying 4xx is pointless, limit to network/5xx. **Blocking:** the toast interceptor is
+> (or add idempotency keys). **Blocking:** retrying 4xx is pointless, limit to network/5xx (and not 501/505, which never change). **Blocking:** the toast interceptor is
 > below the retry so it fires per attempt; move it above. **Blocking:** `retry` re-subscribes an already-built chain so the token isn't
 > refreshed: wrap `next(req)` in `defer` and put auth below the retry. *Should-fix:* jitter.

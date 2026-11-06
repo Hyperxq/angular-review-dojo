@@ -8,7 +8,7 @@ import { filter } from 'rxjs';
   imports: [RouterLink, RouterOutlet],
   template: `
     <nav>
-      <a routerLink="/" class="nav">Orders</a>
+      <a routerLink="." class="nav">Orders</a>
       <a routerLink="help" class="nav">Help</a>
     </nav>
     <main #main tabindex="-1">

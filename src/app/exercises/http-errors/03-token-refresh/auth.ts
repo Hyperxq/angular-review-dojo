@@ -7,7 +7,7 @@ import {
   provideHttpClient,
   withInterceptors,
 } from '@angular/common/http';
-import { Service, inject, signal } from '@angular/core';
+import { DOCUMENT, Service, inject, signal } from '@angular/core';
 import {
   Subject,
   catchError,
@@ -68,7 +68,9 @@ export class AuthService {
 }
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
-  if (req.context.get(SKIP_AUTH)) {
+  const { origin } = inject(DOCUMENT).location;
+  const trustedOrigins = [origin];
+  if (req.context.get(SKIP_AUTH) || !trustedOrigins.includes(new URL(req.url, origin).origin)) {
     return next(req);
   }
   const auth = inject(AuthService);

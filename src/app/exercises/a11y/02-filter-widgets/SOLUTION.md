@@ -9,7 +9,7 @@
 | 3 | Validation error is a plain `div` inserted later: not announced; the input is not `aria-invalid` and not `aria-describedby` the message. | **blocking** |
 | 4 | Reinventing a select: a native `<select>` (or the CDK/Material listbox) would get all of this for free. | should-fix (question the need) |
 | 5 | Background content stays reachable by a screen reader's virtual cursor; the modal should make it `inert`. | should-fix |
-| 6 | The success message is a live region that is created together with its content: some readers miss it. Keep an empty `role="status"` container in the DOM and fill it. | nit |
+| 6 | The success message is a plain `<p class="done">` with no role: it appears silently and screen readers never announce it. Make it a live region, and keep the empty `role="status"` container in the DOM from the start so the message is added into it (a live region created together with its content is missed by some readers). | nit |
 
 ## Why
 

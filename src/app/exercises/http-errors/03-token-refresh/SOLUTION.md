@@ -11,6 +11,7 @@
 | 5 | `logout()` only clears a signal: an in-flight refresh sets the token again, and in-flight requests deliver data after sign-out. | **blocking** (security) |
 | 6 | The refresh token is not visible here; where it lives (HttpOnly cookie vs. storage) is the real security question. | question |
 | 7 | Several tabs refresh independently: a rotating refresh token needs a cross-tab lock. | should-fix (not testable here) |
+| 8 | The interceptor attaches the bearer token to **every** request: a call to a third-party URL (maps, analytics, a CDN) carries the credential. Decide by an allow-list of trusted origins (here the app's own origin), never by an opt-out flag. `SKIP_AUTH` stays only as a behaviour flag that keeps the refresh call out of the `401` handling. | **blocking** (security) |
 
 ## Why
 
@@ -18,7 +19,9 @@ The interceptor body runs once per request, so any "single flight" logic has to 
 requests: a shared observable owned by a service. `share()` makes the one HTTP call serve every subscriber and resets when the
 call ends, so the next expiry starts a new refresh. Replaying means *building a new request with the new token* (requests are immutable;
 `req.clone` from before the refresh still has the old header). The refresh request must be exempt (an `HttpContextToken` flag
-is the supported way to carry per-request intent through interceptors).
+is the supported way to carry per-request intent through interceptors). Who receives the token is a different question:
+credentials are not a behaviour flag, so the interceptor attaches the token only when the URL resolves to a trusted origin, and
+a new third-party call goes out without it until someone adds its origin on purpose.
 
 Session end is an event: model it as one (`Subject`), and tie every long-lived operation to it with `takeUntil`. Unsubscribing from
 an `HttpClient` observable cancels the request (the `TestRequest.cancelled` flag in the spec). A notifier that **errors** makes
@@ -34,6 +37,7 @@ private readonly refresh$ = this.http.post('/auth/refresh', null, { context: new
   share(),
 );
 
+if (req.context.get(SKIP_AUTH) || !trustedOrigins.includes(new URL(req.url, origin).origin)) return next(req);
 next(withToken(auth.token())).pipe(
   catchError((e) => e.status === 401 ? auth.refresh().pipe(switchMap((token) => next(withToken(token)))) : throwError(() => e)),
   takeUntil(auth.sessionEnded$),
@@ -60,5 +64,6 @@ It cannot show real timing, multiple tabs, or what a user sees. The "loop" test 
 
 > **Blocking:** each `401` triggers its own refresh; with rotating refresh tokens that logs users out. Share a single in-flight refresh
 > (`share()`) and replay with the **new** token. **Blocking:** the refresh request goes through the interceptor and loops when it fails; tag it
-> with an `HttpContextToken` and skip it, and end the session once on failure. **Blocking:** `logout()` must cancel the refresh and the in-flight
+> with an `HttpContextToken` and skip it, and end the session once on failure. **Blocking:** the token goes to every URL, third parties included; attach it only for an
+> allow-list of trusted origins. **Blocking:** `logout()` must cancel the refresh and the in-flight
 > requests (`takeUntil`) and a late response must not set the token again. *Should-fix:* think about two tabs refreshing at once.

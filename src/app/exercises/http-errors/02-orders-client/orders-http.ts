@@ -27,8 +27,11 @@ export const RETRY_DELAY = new InjectionToken<number>('RETRY_DELAY', { factory: 
 export const authInterceptor: HttpInterceptorFn = (req, next) =>
   next(req.clone({ setHeaders: { Authorization: `Bearer ${inject(TokenStore).token()}` } }));
 
+const NEVER_RECOVERS = new Set([501, 505]);
+
 const isRetryable = (req: HttpRequest<unknown>, error: HttpErrorResponse) =>
-  (req.method === 'GET' || req.method === 'HEAD') && (error.status === 0 || error.status >= 500);
+  (req.method === 'GET' || req.method === 'HEAD') &&
+  (error.status === 0 || (error.status >= 500 && !NEVER_RECOVERS.has(error.status)));
 
 export const retryInterceptor: HttpInterceptorFn = (req, next) => {
   const delay = inject(RETRY_DELAY);

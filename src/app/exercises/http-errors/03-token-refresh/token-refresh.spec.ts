@@ -32,6 +32,24 @@ describe('L3 - token refresh', () => {
     req.flush({});
   });
 
+  it('sends the token to the own API by absolute URL too', () => {
+    const url = `${location.origin}/api/a`;
+    call(url);
+
+    const req = backend.expectOne(url);
+    expect(req.request.headers.get('Authorization')).toBe('Bearer access-1');
+    req.flush({});
+  });
+
+  it('never sends the token to another origin', () => {
+    const url = 'https://maps.example.com/tiles';
+    call(url);
+
+    const req = backend.expectOne(url);
+    expect(req.request.headers.has('Authorization')).toBe(false);
+    req.flush({});
+  });
+
   it('passes other errors through without refreshing', () => {
     const result = call('/api/a');
 

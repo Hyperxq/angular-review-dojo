@@ -21,8 +21,8 @@ write down what it sees: the request before or after the others modified it, one
 
 Order: `[errorToastInterceptor, retryInterceptor, authInterceptor]`. In `retryInterceptor` use
 `defer(() => next(req)).pipe(retry({ count: 2, delay, ... }))` and give `retry` a conditional: only for `GET`/`HEAD` and
-only when `error.status === 0 || error.status >= 500`; otherwise rethrow immediately (use the `delay` function to throw the error
-for the cases you do not retry).
+only when `error.status === 0` or a `5xx` that can go away on its own (not `501` or `505`, which give the same answer on
+every attempt); otherwise rethrow immediately (use the `delay` function to throw the error for the cases you do not retry).
 
 </details>
 
