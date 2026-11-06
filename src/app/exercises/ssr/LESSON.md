@@ -49,8 +49,8 @@ SSR findings are weighed on a few consequence axes. Apply them to each finding a
 
 Three examples that are not in the exercises:
 
-- A component starts a `setInterval` clock in its constructor. On the server the app never becomes stable (see chapter
-  2), so every render hangs until it times out. Reach: every request to that page. Visible to users as a slow or failed
+- A component starts a `setInterval` clock in its constructor. In an app that still uses Zone.js, the server app never
+  becomes stable (see chapter 2), so every render hangs until it times out. Reach: every request to that page. Visible to users as a slow or failed
   page.
 - A "book not found" page renders a friendly message with HTTP status 200. Users see the right page; crawlers index
   thousands of empty pages. Reach is narrow, visibility is low, but it is cheap to fix.
@@ -261,8 +261,8 @@ The server does not serialize the page as soon as the template has run. It waits
 no pending tasks. `HttpClient` requests register as pending tasks, and so does work you register with `PendingTasks`.
 That is why a server render includes the data it fetched.
 
-It also means that work which never finishes keeps the app unstable. An interval, a polling loop or a websocket started
-on the server holds the render until it times out. In the browser, an app that never becomes stable reports NG0506 in dev
+It also means that work which never finishes keeps the app unstable. In a zoneless app, the default since v21, only
+pending tasks count. With Zone.js, an interval or a polling loop started on the server holds the render until it times out. In the browser, an app that never becomes stable reports NG0506 in dev
 mode. When you review code that starts something periodic, ask where it starts and what stops it on the server.
 
 ### The HTTP transfer cache

@@ -60,7 +60,7 @@ you must opt out explicitly. The code around it moved.
 | HTTP backend | `XMLHttpRequest`. | `fetch` by default, and request options accept fetch's `credentials`, `referrer` and `referrerPolicy` next to the older `withCredentials`. |
 | `DOCUMENT` | Only from `@angular/common`. | Exported from `@angular/core`, re-exported from `@angular/common`. |
 | URL sanitizer | Rewrites unsafe URLs to `unsafe:...`. | Rewrites a `javascript:` URL to `unsafe:javascript:...` and warns in dev mode. |
-| Trusted Types | Supported. | When the browser supports them, Angular creates two policies: `angular` for its own sanitized values and `angular#unsafe-bypass` for every `bypassSecurityTrust*` value. A CSP can allow the first and refuse the second. |
+| Trusted Types | Supported. | When the browser supports them, Angular creates two policies: `angular` for its own sanitized values and `angular#unsafe-bypass` for `bypassSecurityTrust*` HTML, script and resource URL values (style and URL bypasses get no policy). A CSP can allow the first and refuse the second. |
 | CSP | `CSP_NONCE` token or `ngCspNonce` attribute (v16+). | Same, plus an experimental `security.autoCsp` option in the application builder that generates a hash-based strict CSP for `index.html` (default `false`). |
 | SSR | `@angular/ssr` was new. | The builder's `security.allowedHosts` limits which hostnames the server application accepts. |
 
@@ -204,8 +204,8 @@ exactly the destinations that need it. Decide by parsing the URL (chapter 1) and
 you mean, and think about what happens for a destination nobody listed yet.
 
 Request options can widen what the browser sends on its own, too. `withCredentials: true`, or fetch's
-`credentials: 'include'` (accepted by `HttpClient` request options in 22.2.2), tells the browser to attach cookies to a
-cross-origin request. On a request to someone else, that sends your users' cookies to them. `referrer` and
+`credentials: 'include'` (accepted by `HttpClient` request options in 22.2.2), tells the browser to attach that site's cookies to a
+cross-origin request. On a request to someone else, that sends whatever cookies your users hold for that site. `referrer` and
 `referrerPolicy` control how much of the current URL travels along.
 
 ### CSRF and the layers that stop it
@@ -267,7 +267,7 @@ answer depends on the app, so it is something to ask about.
 
 The attacker here does not need a form that renders HTML. They need a feature that turns their text into markup: a
 mention that becomes a link, or a search term that becomes a highlight. Those features
-build markup in code, and markup built in code reaches the page through paths the template sanitizer never sees.
+build markup in code, and markup built in code often reaches the page through paths the template sanitizer never sees.
 
 ### The sinks Angular does not guard
 

@@ -296,8 +296,8 @@ The array follows registration order, so when order matters (which source's resu
 
 > [!WARNING]
 > Mixing multi and regular providers for one token in the same injector throws "Cannot mix multi providers and regular
-> providers", but only in development mode (the check is guarded by `ngDevMode`). In a production build the later
-> registration silently wins. A mistake here can pass a production smoke test and still be wrong.
+> providers", but only in development mode (the check is guarded by `ngDevMode`). In a production build the outcome depends on
+> the order: a later regular provider silently wins, and a later multi provider crashes. A mistake here can pass a production smoke test and still be wrong.
 
 ### Required, defaulted or optional
 
@@ -374,8 +374,8 @@ Root environment injector [app providers]
 
 The lifetime is the surprising part. A route's injector is created the first time the route is matched and, by default,
 lives for the rest of the app, like root. Route scope controls who can see the instance, not how long it lives. To get rid
-of it on exit, opt in with `provideRouter(routes, withAutoCleanupInjectors())` (new in 22.2, and it also needs a
-`RouteReuseStrategy` whose `shouldDestroyInjector` agrees). A service provided by a component, by contrast, dies with
+of it on exit, opt in with `provideRouter(routes, withAutoCleanupInjectors())` (stable since 22.2, replacing the
+experimental name; a custom `RouteReuseStrategy` must also allow it in `shouldDestroyInjector`, while the default one does). A service provided by a component, by contrast, dies with
 that component.
 
 ### Re-providing creates another instance
