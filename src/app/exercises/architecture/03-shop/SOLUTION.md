@@ -22,7 +22,7 @@ notifications/  store, bar, index.ts          depends on: nothing
 cart/           store, panel, index.ts        depends on: notifications
 wishlist/       store, panel, index.ts        depends on: notifications
 catalog/        store, product-card, index.ts depends on: cart, wishlist
-orders/         store, panel, index.ts        depends on: cart, notifications
+orders/         store, index.ts               depends on: cart, notifications
 shared/         money.ts                      depends on: nothing
 ```
 

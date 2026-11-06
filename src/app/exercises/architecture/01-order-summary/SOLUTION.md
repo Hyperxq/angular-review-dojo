@@ -5,7 +5,7 @@
 | # | Finding | Severity |
 |---|---------|----------|
 | 1 | The pricing rules (threshold, discount rate, tax) are re-implemented in the template and drifted from `priceOrder` (`> 500` vs `>= 500`): customers are shown a different price than they are invoiced. | **blocking** |
-| 2 | `OrderSummary` is a presentational component that injects `ProductApi` and fetches stock by itself: it cannot be rendered or tested from its inputs, and data loading is split between the page and the component. | **blocking** |
+| 2 | `OrderSummary` is a presentational component that injects `ProductApi` and fetches stock by itself: it cannot be rendered or tested from its inputs, and data loading is split between the page and the component. | **should-fix** |
 | 3 | Magic numbers (`500`, `0.1`, `1.21`, the low-stock `5`) in a template: no name, no test, no single source. | should-fix |
 | 4 | The low-stock threshold is still a template rule in the fix (`< 5`): move it next to the pricing rules if it is business logic. | nit |
 
@@ -38,5 +38,5 @@ readonly stock = input<Record<number, number>>({});                      // data
 ## What a reviewer should say in the PR comment
 
 > **Blocking:** the template re-implements the pricing rules and has already drifted (`>` vs `>=` at $500, so the customer sees $605
-> and is invoiced $544.50): use `priceOrder` through a `computed`. **Blocking:** `OrderSummary` injects `ProductApi`; make it
+> and is invoiced $544.50): use `priceOrder` through a `computed`. **Should fix:** `OrderSummary` injects `ProductApi`, so it cannot be tested or reused from its inputs; make it
 > presentational (`lines` and `stock` inputs, `confirm` output) and let the page load data. *Nit:* name the thresholds.
